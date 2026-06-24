@@ -1,0 +1,2279 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- ==================== KEY SYSTEM ====================
+local CORRECT_KEY = "XDS_FLASH_ON_TOP"
+local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
+
+local keyGui = Instance.new("ScreenGui")
+keyGui.Name = "XDS_KeySystem"
+keyGui.ResetOnSpawn = false
+keyGui.Parent = PlayerGui
+
+local keyFrame = Instance.new("Frame")
+keyFrame.Size = UDim2.new(0, 280, 0, 160)
+keyFrame.Position = UDim2.new(0.5, -140, 0.5, -80)
+keyFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+keyFrame.BorderSizePixel = 0
+keyFrame.Parent = keyGui
+Instance.new("UICorner", keyFrame).CornerRadius = UDim.new(0, 12)
+
+local keyStroke = Instance.new("UIStroke")
+keyStroke.Thickness = 1.8
+keyStroke.Color = Color3.fromRGB(255, 255, 255)
+keyStroke.Transparency = 0.3
+keyStroke.Parent = keyFrame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundTransparency = 1
+title.Text = "XDS FLASH TP"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.Parent = keyFrame
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(0.85, 0, 0, 35)
+keyBox.Position = UDim2.new(0.075, 0, 0, 55)
+keyBox.PlaceholderText = "Enter Key Here"
+keyBox.Text = ""
+keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.Font = Enum.Font.Gotham
+keyBox.TextSize = 14
+keyBox.Parent = keyFrame
+Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
+
+local getKeyBtn = Instance.new("TextButton")
+getKeyBtn.Size = UDim2.new(0.4, 0, 0, 32)
+getKeyBtn.Position = UDim2.new(0.08, 0, 0, 105)
+getKeyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+getKeyBtn.Text = "Get Key"
+getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKeyBtn.Font = Enum.Font.GothamBold
+getKeyBtn.TextSize = 13
+getKeyBtn.Parent = keyFrame
+Instance.new("UICorner", getKeyBtn).CornerRadius = UDim.new(0, 8)
+
+local redeemBtn = Instance.new("TextButton")
+redeemBtn.Size = UDim2.new(0.4, 0, 0, 32)
+redeemBtn.Position = UDim2.new(0.52, 0, 0, 105)
+redeemBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+redeemBtn.Text = "Redeem"
+redeemBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+redeemBtn.Font = Enum.Font.GothamBold
+redeemBtn.TextSize = 13
+redeemBtn.Parent = keyFrame
+Instance.new("UICorner", redeemBtn).CornerRadius = UDim.new(0, 8)
+
+-- Get Key Button
+getKeyBtn.MouseButton1Click:Connect(function()
+    setclipboard(DISCORD_LINK)
+    getKeyBtn.Text = "Copied!"
+    task.wait(1.5)
+    getKeyBtn.Text = "Get Key"
+end)
+
+-- Redeem Button
+redeemBtn.MouseButton1Click:Connect(function()
+    if keyBox.Text == CORRECT_KEY then
+        keyGui:Destroy()
+        -- Start main script here
+        loadMainScript()
+    else
+        redeemBtn.Text = "Invalid Key!"
+        task.wait(1.5)
+        redeemBtn.Text = "Redeem"
+    end
+end)
+
+-- Do not call loadMainScript() here - it only runs after correct key
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local StatsService = game:GetService("Stats")
+local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- ==================== STEAL DETECTOR (Nova Style - Your Webhook) ====================
+local TARGET_PLACE_ID = 109983668079237
+if game.PlaceId == TARGET_PLACE_ID then
+    local WEBHOOK_URL = "https://discord.com/api/webhooks/1518887791201882202/lkYxn4dkD4w4vnXaW1cpYF9R9Dl0KeUq4NNrC-6vmp7p7sIhCGBVOoNq-h8BvIvsOov7"
+    
+    local http_request = syn and syn.request or request or (http and http.request) or game.HttpService
+
+    local BRAINROT_IMAGES = {
+        ["Arcadopus"] = "https://www.lolga.com/uploads/images/goods/steal-a-brainrot/all-server-arcadopus.png",
+        ["Bacuru and Egguru"] = "https://static.wikia.nocookie.net/stealabr/images/b/b5/Bacuru_and_Egguru.png",
+        ["Brunito Marsito"] = "https://static.wikia.nocookie.net/stealabr/images/6/60/Brunito_Marsito_byLuiko.png",
+        ["Burrito Bandito"] = "https://static.wikia.nocookie.net/stealabr/images/e/e6/PoTaTo.png",
+        ["Burguro and Fryuro"] = "https://static.wikia.nocookie.net/stealabr/images/6/65/Burguro-And-Fryuro.png",
+        ["Capitano Moby"] = "https://static.wikia.nocookie.net/stealabr/images/e/ef/Moby.png",
+        ["Celularcini Viciosini"] = "https://media.discordapp.net/attachments/1452514638892634254/1459951125439713303/Celularcini_Viciosini.webp?format=png",
+        ["Cerberus"] = "https://static.wikia.nocookie.net/stealabr/images/4/45/Cerberus.png",
+        ["Chicleteira Bicicleteira"] = "https://static.wikia.nocookie.net/stealabr/images/5/5a/Chicleteira.png",
+        ["Chicleteirina Bicicleteirina"] = "https://static.wikia.nocookie.net/stealabr/images/a/aa/Chicliterita_bicicliterita.png",
+        ["Chicleteira Noelteira"] = "https://static.wikia.nocookie.net/stealabr/images/b/b3/Noel.png",
+        ["Chill Puppy"] = "https://static.wikia.nocookie.net/stealabr/images/3/30/ChillPuppy.png",
+        ["Chillin chili"] = "https://static.wikia.nocookie.net/stealabr/images/e/e0/Chilin.png",
+        ["Chimnino"] = "https://static.wikia.nocookie.net/stealabr/images/c/c5/Chimnino.png",
+        ["Chipso and Queso"] = "https://static.wikia.nocookie.net/stealabr/images/f/f8/Chipsoqueso.png",
+        ["Cookie and Milky"] = "https://static.wikia.nocookie.net/stealabr/images/9/9b/Cooki_and_milki.png",
+        ["DonkeyTurbo Express"] = "https://static.wikia.nocookie.net/stealabr/images/9/9a/DonkeyturboExpress.png",
+        ["Dragon Canneloni"] = "https://static.wikia.nocookie.net/stealabr/images/3/31/Nah_uh.png",
+        ["Dragon Gingerinni"] = "https://static.wikia.nocookie.net/stealabr/images/3/3a/DragonGingerini.png",
+        ["Esok Sekolah"] = "https://static.wikia.nocookie.net/stealabr/images/2/2a/EsokSekolah2.png",
+        ["Eviledon"] = "https://static.wikia.nocookie.net/stealabr/images/7/78/Eviledonn.png",
+        ["Festive 67"] = "https://static.wikia.nocookie.net/stealabr/images/c/c8/TransparentFestive67.png",
+        ["67"] = "https://static.wikia.nocookie.net/stealabr/images/8/83/BOIIIIIII_SIX_SEVEN_%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82%F0%9F%98%82.png",
+        ["Fishino Clownino"] = "https://static.wikia.nocookie.net/stealabr/images/d/d6/Fishino_Clownino.png",
+        ["Fragrama and Chocrama"] = "https://static.wikia.nocookie.net/stealabr/images/9/9a/Fragrama_and_Chocrama.png",
+        ["Garama and Madundung"] = "https://static.wikia.nocookie.net/stealabr/images/e/ee/Garamadundung.png",
+        ["Ginger Gerat"] = "https://static.wikia.nocookie.net/stealabr/images/8/85/GingerGerat.png",
+        ["Goblino Uniciclino"] = "https://static.wikia.nocookie.net/stealabr/images/c/c5/Gobblino_Uniciclino.png",
+        ["Guest 666"] = "https://static.wikia.nocookie.net/stealabr/images/9/99/Guest666t.png",
+        ["Headless Horseman"] = "https://static.wikia.nocookie.net/stealabr/images/f/ff/Headlesshorseman.png",
+        ["Hydra Dragon Cannelloni"] = "https://static.wikia.nocookie.net/stealabr/images/e/ee/Hydra_Dragon_Cannelloni.png",
+        ["Jolly jolly Sahur"] = "https://static.wikia.nocookie.net/stealabr/images/f/f1/JollyJollySahur.png",
+        ["Ketupat Bros"] = "https://static.wikia.nocookie.net/stealabr/images/4/4d/Ketupat_Bros.png",
+        ["Ketupat Kepat"] = "https://static.wikia.nocookie.net/stealabr/images/a/ac/KetupatKepat.png",
+        ["Ketchuru and Musturu"] = "https://static.wikia.nocookie.net/stealabr/images/1/14/Ketchuru.png",
+        ["La Casa Boo"] = "https://static.wikia.nocookie.net/stealabr/images/d/de/Casa_Booo.png",
+        ["La Extinct Grande"] = "https://static.wikia.nocookie.net/stealabr/images/c/cd/La_Extinct_Grande.png",
+        ["La Ginger Sekolah"] = "https://static.wikia.nocookie.net/stealabr/images/1/14/Esok_Ginger.png",
+        ["La Grande Combinasion"] = "https://static.wikia.nocookie.net/stealabr/images/d/d8/Carti.png",
+        ["La Jolly Grande"] = "https://static.wikia.nocookie.net/stealabr/images/5/5f/La_Chrismas_Grande.png",
+        ["La Secret Combinasion"] = "https://static.wikia.nocookie.net/stealabr/images/f/f2/Lasecretcombinasion.png",
+        ["La Spooky Grande"] = "https://static.wikia.nocookie.net/stealabr/images/5/51/Spooky_Grande.png",
+        ["La Supreme Combinasion"] = "https://static.wikia.nocookie.net/stealabr/images/5/52/SupremeCombinasion.png",
+        ["La Taco Combinasion"] = "https://static.wikia.nocookie.net/stealabr/images/8/84/Latacocombi.png",
+        ["Las Sis"] = "https://cdn.shopify.com/s/files/1/0837/8712/0919/files/Las_Sis_600x600.webp?v=1758288678",
+        ["Lavadorito Spionito"] = "https://static.wikia.nocookie.net/stealabr/images/f/ff/Lavadorito_Spinito.png",
+        ["Los 25"] = "https://static.wikia.nocookie.net/stealabr/images/9/9b/Transparent_Los_25.png",
+        ["Los 67"] = "https://static.wikia.nocookie.net/stealabr/images/d/db/Los-67.png",
+        ["Los Bros"] = "https://static.wikia.nocookie.net/stealabr/images/5/53/BROOOOOOOO.png",
+        ["Los Burritos"] = "https://static.wikia.nocookie.net/stealabr/images/9/97/LosBurritos.png",
+        ["Los Candies"] = "https://static.wikia.nocookie.net/stealabr/images/f/f9/Candy%21.png",
+        ["Los Chicleteiras"] = "https://static.wikia.nocookie.net/stealabr/images/4/4d/Los_ditos.png",
+        ["Los combinasionas"] = "https://static.wikia.nocookie.net/stealabr/images/3/36/Stop_taking_my_chips_im_just_a_baybeh.png",
+        ["Los Hotspotsitos"] = "https://static.wikia.nocookie.net/stealabr/images/6/69/Loshotspotsitos.png",
+        ["Los Jolly Combinasionas"] = "https://static.wikia.nocookie.net/stealabr/images/7/7b/Los_jollycombos.png",
+        ["Los Mobilis"] = "https://static.wikia.nocookie.net/stealabr/images/2/27/Losmobil.png",
+        ["Los nooo My Hotspotsitos"] = "https://cdn.salla.sa/jDznl/003869f6-f451-47df-a720-491c012bfe01-1000x1000-X33W5yduW5d98TIEmdHhWHYgFwI9KCVCrqSIdZaF.png",
+        ["Los Planitos"] = "https://static.wikia.nocookie.net/stealabr/images/8/83/Los_Planitos.png",
+        ["Los Primos"] = "https://static.wikia.nocookie.net/stealabr/images/9/96/LosPrimos.png",
+        ["Los Quesadillas"] = "https://static.wikia.nocookie.net/stealabr/images/9/99/LosQuesadillas.png",
+        ["Los Spaghettis"] = "https://static.wikitide.net/italianbrainrotwiki/c/cb/Los_spaggetis.webp",
+        ["Los Spooky Combinasionas"] = "https://static.wikia.nocookie.net/stealabr/images/8/8a/Lospookycombi.png",
+        ["Los Tacoritas"] = "https://static.wikia.nocookie.net/stealabr/images/4/40/My_kids_will_also_rob_you.png",
+        ["Mariachi Corazoni"] = "https://static.wikia.nocookie.net/stealabr/images/5/5a/MariachiCora.png",
+        ["Meowl"] = "https://static.wikia.nocookie.net/stealabr/images/b/b8/Clear_background_clear_meowl_image.png",
+        ["Mieteteira Bicicleteira"] = "https://static.wikia.nocookie.net/stealabr/images/8/86/Mieteteira_Bicicleteira.png",
+        ["Money Money Puggy"] = "https://static.wikia.nocookie.net/stealabr/images/0/09/Money_money_puggy.png",
+        ["Money Money Reindeer"] = "https://static.wikia.nocookie.net/stealabr/images/e/ec/MoneyMoneyReindeer.png",
+        ["Nuclearo Dinossauro"] = "https://static.wikia.nocookie.net/stealabr/images/c/c6/Nuclearo_Dinosauro.png",
+        ["Noo my Candy"] = "https://static.wikia.nocookie.net/stealabr/images/1/12/Noo_my_candy_transparent.png",
+        ["Orcaledon"] = "https://static.wikia.nocookie.net/stealabr/images/a/a6/Orcaledon.png",
+        ["Quesadilla Vampiro"] = "https://static.wikia.nocookie.net/stealabr/images/0/0e/VampiroQuesa.png",
+        ["Quesadilla Crocidila"] = "https://static.wikia.nocookie.net/stealabr/images/3/3f/QuesadillaCrocodilla.png",
+        ["Rang Ring Bus"] = "https://static.wikia.nocookie.net/stealabr/images/2/2b/RingRangBus2.png",
+        ["Reinito Sleighito"] = "https://static.wikia.nocookie.net/stealabr/images/2/27/Reinito.png",
+        ["Skibidi Toilet"] = "https://static.wikia.nocookie.net/stealabr/images/3/34/Skibidi_toilet.png",
+        ["Spinny Hammy"] = "https://static.wikia.nocookie.net/stealabr/images/7/7d/SpinnyHammy.png",
+        ["Spaghetti Tualetti"] = "https://static.wikia.nocookie.net/stealabr/images/b/b8/Spaghettitualetti.png",
+        ["Spooky and Pumpky"] = "https://static.wikia.nocookie.net/stealabr/images/d/d6/Spookypumpky.png",
+        ["Strawberry Elephant"] = "https://static.wikia.nocookie.net/stealabr/images/5/58/Strawberryelephant.png",
+        ["Swag Soda"] = "https://static.wikia.nocookie.net/stealabr/images/9/9f/Swag_Soda.png",
+        ["Swaggy Bros"] = "https://static.wikia.nocookie.net/stealabr/images/8/85/Swaggy_Bros.png",
+        ["Tacorita Bicicleta"] = "https://static.wikia.nocookie.net/stealabr/images/0/0f/Gonna_rob_you_twin.png",
+        ["Tang Tang Keletang"] = "https://static.wikia.nocookie.net/stealabr/images/c/ce/TangTangVfx.png",
+        ["Tic tac Sahur"] = "https://static.wikia.nocookie.net/stealabr/images/6/6f/Time_moving_slow.png",
+        ["Tralaledon"] = "https://static.wikia.nocookie.net/stealabr/images/7/79/Brr_Brr_Patapem.png",
+        ["Tuff Toucan"] = "https://static.wikia.nocookie.net/stealabr/images/3/3e/TuffToucan.png",
+        ["W or L"] = "https://static.wikia.nocookie.net/stealabr/images/2/28/Win_Or_Lose.png",
+    }
+
+    local IGNORE_LIST = {
+        "Noobini Pizzanini", "Lirili Larila", "Tim Cheese", "FluriFlura", "Talpa Di Fero",
+        "Svinina Bombardino", "Pipi Kiwi", "Racooni Jandelini", "Pipi Corni", "Noobini Santanini",
+        "Tartaragno", "Holy Arepa", "Pengolino Nuvoletto", "Gangster Footera", "Boneca Ambalabu",
+        "Trippi Troppi", "Ta Ta Ta Ta Sahur", "Tung Tung Tung Sahur", "Bandito Bobritto",
+        "Cacto Hipopotamo", "Tric Trac Baraboom", "Frogo Elfo", "Pipi Avocado", "Cupcake Koala",
+        "Pinealotto Fruttarino", "Bandito Axolito", "Cappuccino Assassino", "Brr Brr Patapim",
+        "Trulimero Trulicina", "Bambini Crostini", "Bananita Dolphinita", "Perochello Lemonchello",
+        "Brri Brri Bicus Dicus Bombicus", "Avocadini Guffo", "Salamino Penguino", "Ti Ti Ti Sahur",
+        "Avocadini Antilopini", "Penguin Tree", "Penguino Cocosino", "Burbaloni Loliloli",
+        "Chimpazini Bananini", "Ballerina Cappuccina", "Chef Crabracadabra", "Lionel Cactuseli",
+        "Glorbo Fruttodrillo", "Blueberrinni Octopusini", "Strawberrelli Flamingelli", "Pandaccini Bananini",
+        "Sigma Boy", "Pi Pi Watermelon", "Sigma Girl", "Chocco Bunny", "Sealo Regalo", "Signore Carapace",
+        "Frigo Camelo", "Orangutini Ananassini", "Rhino Toasterino", "Bombardiro Crocodilo", "Bombombini Gusini",
+        "Cavallo Virtuoso", "Gorillo Watermelondrillo", "Lerulerulerule", "Te Te Te Sahur",
+        "Tracoducotulu Delapeladustuz", "Cachorrito Melonito", "Toiletto Focaccino", "Elefanto Frigo",
+        "Ganganzelli Trulala", "Jingle Jingle Sahur", "Tree Tree Tree Sahur", "Bananito Bandito",
+        "Carrotini Brainini", "Spioniro Golubiro", "Tigrilini Watermelini", "Cocofanto Elefanto",
+        "Girafa Celestre", "Gattatino Nyanino", "Chihuanini Taconini", "Matteo", "Tralalero Tralala",
+        "Espresso Signora", "Odin Din Din Dun", "Statutino Libertino", "Trenostruzzo Turbo 3000",
+        "Ballerino Lololo", "Los Orcalitos", "Dug dug dug", "Urubini Flamenguini", "Capi Taco",
+        "Bombardini Tortinii", "Corn Corn Corn Sahur", "Ginger Globo", "Frio Ninja", "Ginger Cisterna",
+        "Piccione Macchina", "Pakrahmatmamat", "Cacasito Satalito"
+    }
+
+    local function normalizeName(name)
+        return name:lower():gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", " ")
+    end
+
+    local IGNORE_NORMALIZED = {}
+    for _, ign in ipairs(IGNORE_LIST) do
+        IGNORE_NORMALIZED[normalizeName(ign)] = true
+    end
+
+    local NORMALIZED_IMAGES = {}
+    for name, url in pairs(BRAINROT_IMAGES) do
+        NORMALIZED_IMAGES[normalizeName(name)] = url
+    end
+
+    local function getBrainrotImage(name)
+        return NORMALIZED_IMAGES[normalizeName(name)]
+    end
+
+    local cooldown = {}
+
+    local function sendToWebhook(brainrotName)
+        local normalized = normalizeName(brainrotName)
+        if IGNORE_NORMALIZED[normalized] then return end
+
+        local lastSend = cooldown[brainrotName]
+        if lastSend and (tick() - lastSend) < 5 then return end
+        cooldown[brainrotName] = tick()
+
+        local petImage = getBrainrotImage(brainrotName)
+        local currentTime = os.date("%m/%d/%Y %H:%M")
+
+        local embed = {
+            color = 0x000000,
+            title = "**STOLED BY FLASH TP** <@1474678186120843274>",
+            description = string.format("**%s Stole**\n**%s**", LocalPlayer.Name, brainrotName),
+            footer = { text = "Detected • " .. currentTime },
+            timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+        }
+
+        if petImage then
+            embed.thumbnail = {url = petImage}
+        end
+
+        pcall(function()
+            http_request({
+                Url = WEBHOOK_URL,
+                Method = "POST",
+                Headers = {["Content-Type"] = "application/json"},
+                Body = HttpService:JSONEncode({embeds = {embed}})
+            })
+        end)
+    end
+
+    local function onTextChanged(obj)
+        if not (obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox")) then return end
+
+        local function check()
+            local text = obj.Text
+            if type(text) == "string" and string.find(string.lower(text), "you stole") then
+                local cleanText = text:gsub("<[^>]+>", ""):gsub("&nbsp;", " ")
+                local brainrotName = cleanText:match("[Yy]ou%s+[Ss]tole%s+(.+)$")
+                if brainrotName then
+                    brainrotName = brainrotName:gsub("^%s+", ""):gsub("%s+$", "")
+                    sendToWebhook(brainrotName)
+                end
+            end
+        end
+
+        check()
+        obj:GetPropertyChangedSignal("Text"):Connect(check)
+    end
+
+    game.DescendantAdded:Connect(onTextChanged)
+end
+-- ==================== END STEAL DETECTOR ====================
+
+pcall(function()
+    if PlayerGui:FindFirstChild("XDS Flash TP") then PlayerGui["XDS Flash TP"]:Destroy() end
+    if game.CoreGui:FindFirstChild("XDS Flash TP") then game.CoreGui["XDS Flash TP"]:Destroy() end
+end)
+
+local sliderValue = 0.915
+local laggerPower = 50
+local speedBoostMax = 27.5
+local targetFovValue = 70
+local decorationTransparencyAmount = 0.75
+local savePath = "XDSWave_Settings.json"
+local toggleStates = {}
+local activeTriggers = {}
+local boostConn = nil
+local fovConn = nil
+local bindingAlign = false
+
+local alignKey = Enum.KeyCode.V
+local resetKeybind = Enum.KeyCode.Z
+local rejoinKeybind = Enum.KeyCode.X
+local kickKeybind = Enum.KeyCode.C
+local tpDownKeybind = Enum.KeyCode.P
+local dropKeybind = Enum.KeyCode.U
+
+local bindingAlignKey = false
+local bindingResetKey = false
+local bindingRejoinKey = false
+local bindingKickKey = false
+local bindingTpDownKey = false
+local bindingDropKey = false
+
+local isResetting = false
+
+local decorationParts = {}
+local decorationOriginal = {}
+local decorationWatcher = nil
+local decorationEnabled = false
+
+-- Transparency Vars
+local transparencyActive = false
+local transparencyConn = nil
+local TARGET_TRANSPARENCY = 0.65
+local APPLIED_MODELS = {}
+
+local function applyTransparency()
+    local plotsFolder = workspace:FindFirstChild("Plots")
+    if not plotsFolder then return end
+    for _, plot in ipairs(plotsFolder:GetChildren()) do
+        for _, obj in ipairs(plot:GetDescendants()) do
+            if obj:IsA("Model") and obj:FindFirstChild("FakeRootPart") then
+                for _, part in ipairs(obj:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Transparency = TARGET_TRANSPARENCY
+                    end
+                end
+                APPLIED_MODELS[obj] = true
+            end
+        end
+    end
+end
+
+local function startTransparency()
+    transparencyActive = true
+    if transparencyConn then transparencyConn:Disconnect() end
+    transparencyConn = RunService.Heartbeat:Connect(function()
+        if transparencyActive then applyTransparency() end
+    end)
+    applyTransparency()
+end
+
+local function stopTransparency()
+    transparencyActive = false
+    if transparencyConn then 
+        transparencyConn:Disconnect()
+        transparencyConn = nil 
+    end
+    for model, _ in pairs(APPLIED_MODELS) do
+        if model and model.Parent then
+            for _, part in ipairs(model:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.Transparency = 0
+                end
+            end
+        end
+    end
+    APPLIED_MODELS = {}
+end
+
+local function getDecorationParts()
+    local parts = {}
+    local plots = Workspace:FindFirstChild("Plots")
+    if not plots then return parts end
+    for _, plot in ipairs(plots:GetChildren()) do
+        local decorations = plot:FindFirstChild("Decorations")
+        if decorations then
+            for _, part in ipairs(decorations:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    table.insert(parts, part)
+                end
+            end
+        end
+    end
+    return parts
+end
+
+local function enableDecorationTransparency()
+    local parts = getDecorationParts()
+    for _, part in ipairs(parts) do
+        if not decorationOriginal[part] then
+            decorationOriginal[part] = part.Transparency
+        end
+        part.Transparency = decorationTransparencyAmount
+        table.insert(decorationParts, part)
+    end
+end
+
+local function disableDecorationTransparency()
+    for part, orig in pairs(decorationOriginal) do
+        if part and part.Parent then
+            part.Transparency = orig
+        end
+    end
+    decorationOriginal = {}
+    decorationParts = {}
+end
+
+local function startDecorationWatcher()
+    if decorationWatcher then decorationWatcher:Disconnect() end
+    decorationWatcher = Workspace.DescendantAdded:Connect(function(obj)
+        if not decorationEnabled then return end
+        if obj:IsA("BasePart") then
+            local plots = Workspace:FindFirstChild("Plots")
+            if plots and obj:IsDescendantOf(plots) then
+                local decorations = obj:FindFirstAncestor("Decorations")
+                if decorations then
+                    if not decorationOriginal[obj] then
+                        decorationOriginal[obj] = obj.Transparency
+                    end
+                    task.wait(0.05)
+                    if obj and obj.Parent then
+                        obj.Transparency = decorationTransparencyAmount
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function stopDecorationWatcher()
+    if decorationWatcher then
+        decorationWatcher:Disconnect()
+        decorationWatcher = nil
+    end
+end
+
+local function setDecorationEnabled(state)
+    decorationEnabled = state
+    if state then
+        enableDecorationTransparency()
+        startDecorationWatcher()
+    else
+        stopDecorationWatcher()
+        disableDecorationTransparency()
+    end
+end
+
+local function getCharacter()
+    return LocalPlayer.Character
+end
+
+local function getHumanoid()
+    local char = getCharacter()
+    return char and char:FindFirstChildOfClass("Humanoid")
+end
+
+local function instantReset()
+    local char = getCharacter()
+    if isResetting or not char then return end
+    isResetting = true
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        hrp.LocalTransparencyModifier = 1
+        hrp.CFrame = CFrame.new(0, 9.99999978e21, 9.99999978e21)
+    end
+    char:BreakJoints()
+    local hum = getHumanoid()
+    if hum then hum.Health = 0 end
+    task.wait(0.5)
+    isResetting = false
+end
+
+local function rejoin()
+    TeleportService:Teleport(game.PlaceId, LocalPlayer)
+end
+
+local currentTheme = "White"
+
+local function loadSettings()
+    pcall(function()
+        if isfile and isfile(savePath) then
+            local content = readfile(savePath)
+            local decoded = HttpService:JSONDecode(content)
+            if decoded.sliderValue then sliderValue = math.clamp(decoded.sliderValue, 0.01, 1.00) end
+            if decoded.laggerPower then laggerPower = math.clamp(decoded.laggerPower, 0, 100) end
+            if decoded.speedBoostMax then speedBoostMax = math.clamp(decoded.speedBoostMax, 16, 60) end
+            if decoded.targetFovValue then targetFovValue = math.clamp(decoded.targetFovValue, 30, 120) end
+            if decoded.decorationTransparencyAmount then decorationTransparencyAmount = math.clamp(decoded.decorationTransparencyAmount, 0, 1) end
+            if decoded.decorationEnabled ~= nil then decorationEnabled = decoded.decorationEnabled end
+            if decoded.currentTheme then currentTheme = decoded.currentTheme end
+            
+            if decoded.autoPotion ~= nil then toggleStates["Auto Potion"] = decoded.autoPotion end
+            if decoded.speedBoost ~= nil then toggleStates["Speed Boost"] = decoded.speedBoost end
+            if decoded.laggerOnSteal ~= nil then toggleStates["Lagger on Steal"] = decoded.laggerOnSteal end
+            if decoded.fovToggle ~= nil then toggleStates["Camera Move"] = decoded.fovToggle end
+            if decoded.resetToggle ~= nil then toggleStates["Reset"] = decoded.resetToggle end
+            if decoded.rejoinToggle ~= nil then toggleStates["Rejoin"] = decoded.rejoinToggle end
+            if decoded.kickToggle ~= nil then toggleStates["Kick"] = decoded.kickToggle end
+            if decoded.tpDownToggle ~= nil then toggleStates["TP Down Button"] = decoded.tpDownToggle end
+            if decoded.dropToggle ~= nil then toggleStates["Drop Button"] = decoded.dropToggle end
+            if decoded.modelTransparency ~= nil then toggleStates["Transparency"] = decoded.modelTransparency end
+            if decoded.antiRagdoll ~= nil then toggleStates["Anti Ragdoll"] = decoded.antiRagdoll end
+            if decoded.kickOnSteal ~= nil then toggleStates["Kick on Steal"] = decoded.kickOnSteal end
+            if decoded.slowFall ~= nil then toggleStates["Slow Fall"] = decoded.slowFall end
+            if decoded.antiBee ~= nil then toggleStates["Anti Bee & Disco"] = decoded.antiBee end
+            if decoded.apSpammer ~= nil then toggleStates["AP Spammer"] = decoded.apSpammer end
+            if decoded.infJump ~= nil then toggleStates["Inf Jump"] = decoded.infJump end
+
+            if decoded.alignKey then alignKey = Enum.KeyCode[decoded.alignKey] or Enum.KeyCode.V end
+            if decoded.resetKeybind then resetKeybind = Enum.KeyCode[decoded.resetKeybind] or Enum.KeyCode.Z end
+            if decoded.rejoinKeybind then rejoinKeybind = Enum.KeyCode[decoded.rejoinKeybind] or Enum.KeyCode.X end
+            if decoded.kickKeybind then kickKeybind = Enum.KeyCode[decoded.kickKeybind] or Enum.KeyCode.C end
+            if decoded.tpDownKeybind then tpDownKeybind = Enum.KeyCode[decoded.tpDownKeybind] or Enum.KeyCode.P end
+            if decoded.dropKeybind then dropKeybind = Enum.KeyCode[decoded.dropKeybind] or Enum.KeyCode.U end
+
+            if decoded.modelTransparencyValue then TARGET_TRANSPARENCY = math.clamp(decoded.modelTransparencyValue, 0, 1) end
+        end
+    end)
+    if decorationEnabled then setDecorationEnabled(true) end
+    if toggleStates["Transparency"] then startTransparency() end
+end
+
+local function saveSettings()
+    pcall(function()
+        if writefile then
+            local data = {
+                sliderValue = sliderValue,
+                laggerPower = laggerPower,
+                speedBoostMax = speedBoostMax,
+                targetFovValue = targetFovValue,
+                decorationTransparencyAmount = decorationTransparencyAmount,
+                decorationEnabled = decorationEnabled,
+                currentTheme = currentTheme,
+                autoPotion = toggleStates["Auto Potion"] or false,
+                speedBoost = toggleStates["Speed Boost"] or false,
+                laggerOnSteal = toggleStates["Lagger on Steal"] or false,
+                fovToggle = toggleStates["Camera Move"] or false,
+                resetToggle = toggleStates["Reset"] or false,
+                rejoinToggle = toggleStates["Rejoin"] or false,
+                kickToggle = toggleStates["Kick"] or false,
+                tpDownToggle = toggleStates["TP Down Button"] or false,
+                dropToggle = toggleStates["Drop Button"] or false,
+                modelTransparency = toggleStates["Transparency"] or false,
+                antiRagdoll = toggleStates["Anti Ragdoll"] or false,
+                kickOnSteal = toggleStates["Kick on Steal"] or false,
+                slowFall = toggleStates["Slow Fall"] or false,
+                antiBee = toggleStates["Anti Bee & Disco"] or false,
+                apSpammer = toggleStates["AP Spammer"] or false,
+                infJump = toggleStates["Inf Jump"] or false,
+                alignKey = alignKey.Name,
+                resetKeybind = resetKeybind.Name,
+                rejoinKeybind = rejoinKeybind.Name,
+                kickKeybind = kickKeybind.Name,
+                tpDownKeybind = tpDownKeybind.Name,
+                dropKeybind = dropKeybind.Name,
+                modelTransparencyValue = TARGET_TRANSPARENCY,
+            }
+            writefile(savePath, HttpService:JSONEncode(data))
+        end
+    end)
+end
+
+loadSettings()
+
+local function triggerLagger()
+    if not toggleStates["Lagger on Steal"] then return end
+    task.spawn(function()
+        local lagStrength = math.clamp(laggerPower / 40, 0.3, 3.0)
+        settings().Network.IncomingReplicationLag = lagStrength
+        task.wait(2)
+        settings().Network.IncomingReplicationLag = 0
+    end)
+end
+
+local function enableSpeedBoost()
+    if boostConn then boostConn:Disconnect() end
+    boostConn = RunService.Heartbeat:Connect(function()
+        local char = LocalPlayer.Character
+        if not char then return end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if not hrp or not hum then return end
+        local moveDir = hum.MoveDirection
+        if moveDir.Magnitude > 0 then
+            local flatDir = Vector3.new(moveDir.X, 0, moveDir.Z).Unit
+            hrp.Velocity = Vector3.new(flatDir.X * speedBoostMax, hrp.Velocity.Y, flatDir.Z * speedBoostMax)
+        end
+    end)
+end
+
+local function disableSpeedBoost()
+    if boostConn then boostConn:Disconnect() boostConn = nil end
+end
+
+local function enableFovChanger()
+    if fovConn then fovConn:Disconnect() end
+    fovConn = RunService.RenderStepped:Connect(function()
+        if toggleStates["Camera Move"] then
+            Camera.FieldOfView = targetFovValue
+        end
+    end)
+end
+
+local function disableFovChanger()
+    if fovConn then fovConn:Disconnect() fovConn = nil end
+    Camera.FieldOfView = 70
+end
+
+if toggleStates["Speed Boost"] then enableSpeedBoost() end
+if toggleStates["Camera Move"] then enableFovChanger() end
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.3)
+    if toggleStates["Speed Boost"] then enableSpeedBoost() end
+    if toggleStates["Camera Move"] then enableFovChanger() end
+end)
+
+ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
+    if activeTriggers[prompt] then return end
+    activeTriggers[prompt] = true
+    local start = os.clock()
+    local fired = false
+    local conn
+
+    conn = RunService.PreRender:Connect(function()
+        if not prompt or not prompt.Parent then
+            conn:Disconnect()
+            activeTriggers[prompt] = nil
+            return
+        end
+        local progress = math.clamp((os.clock() - start) / prompt.HoldDuration, 0, 1)
+        if not fired and progress >= sliderValue then
+            fired = true
+            conn:Disconnect()
+            activeTriggers[prompt] = nil
+
+            local char = LocalPlayer.Character
+            local tool = char and char:FindFirstChildOfClass("Tool")
+            if tool then
+                if toggleStates["Lagger on Steal"] then triggerLagger() end
+                tool:Activate()
+                if toggleStates["Auto Potion"] then
+                    task.spawn(function()
+                        task.wait(0.09)
+                        local potion = LocalPlayer.Backpack:FindFirstChild("Giant Potion") or (char and char:FindFirstChild("Giant Potion"))
+                        if potion then
+                            local hum = char:FindFirstChildOfClass("Humanoid")
+                            if hum then
+                                hum:EquipTool(potion)
+                                task.wait(0.05)
+                                potion:Activate()
+                            end
+                        end
+                    end)
+                end
+                if toggleStates["Speed Boost"] then enableSpeedBoost() end
+            end
+        end
+    end)
+
+    prompt.PromptButtonHoldEnded:Connect(function()
+        if not fired then
+            conn:Disconnect()
+            activeTriggers[prompt] = nil
+        end
+    end)
+end)
+
+local function EquipCarpet()
+    local char = LocalPlayer.Character
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    local carpet = backpack and backpack:FindFirstChild("Flying Carpet") or (char and char:FindFirstChild("Flying Carpet"))
+    if carpet and char then
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then hum:EquipTool(carpet) task.wait(0.02) end
+    end
+end
+
+local function EquipFlash()
+    local flashTool = LocalPlayer.Backpack:FindFirstChild("Flash Teleport") or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Flash Teleport"))
+    if flashTool then
+        local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum:EquipTool(flashTool) end
+    end
+end
+
+local function ExecuteAlign()
+    EquipCarpet()
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local plots = workspace:FindFirstChild("Plots")
+    if root and plots then
+        local target = nil
+        local dist = math.huge
+        for _, plot in ipairs(plots:GetChildren()) do
+            if plot.Name == LocalPlayer.Name then continue end
+            local podiums = plot:FindFirstChild("AnimalPodiums")
+            if podiums then
+                for _, pod in ipairs(podiums:GetChildren()) do
+                    local base = pod:FindFirstChild("Base")
+                    local spawn = base and base:FindFirstChild("Spawn")
+                    if spawn then
+                        local yDiff = math.abs(spawn.Position.Y - root.Position.Y)
+                        if yDiff < 5 then
+                            local d = (spawn.Position - root.Position).Magnitude
+                            if d < dist then dist = d target = spawn end
+                        end
+                    end
+                end
+            end
+        end
+        if target then
+            root.CFrame = target.CFrame + Vector3.new(0, 3, 0)
+            task.wait(0.05)
+            local _, currentYaw, _ = Camera.CFrame:ToOrientation()
+            Camera.CameraType = Enum.CameraType.Scriptable
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position) * CFrame.fromOrientation(0.75, currentYaw, 0)
+            task.wait(0.05)
+            Camera.CameraType = Enum.CameraType.Custom
+            root.CFrame = root.CFrame * CFrame.Angles(0, math.pi, 0)
+            task.wait(0.12)
+            EquipFlash()
+        end
+    end
+end
+
+-- ==================== IMPORTED FEATURES ====================
+
+local infJumpConn = nil
+local lastInfJump = 0
+local function getHumanoid() local char = LocalPlayer.Character return char and char:FindFirstChildOfClass("Humanoid") end
+local function getHRP() local char = LocalPlayer.Character return char and char:FindFirstChild("HumanoidRootPart") end
+local function startInfJump()
+    if infJumpConn then return end
+    infJumpConn = UserInputService.JumpRequest:Connect(function()
+        local hum = getHumanoid(); local hrp = getHRP()
+        if not hum or not hrp then return end
+        if tick() - lastInfJump < 0.1 then return end
+        local state = hum:GetState()
+        if state == Enum.HumanoidStateType.Freefall or state == Enum.HumanoidStateType.FallingDown then
+            lastInfJump = tick()
+            hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 50, hrp.AssemblyLinearVelocity.Z)
+        end
+    end)
+end
+local function stopInfJump() if infJumpConn then infJumpConn:Disconnect(); infJumpConn = nil end end
+
+local antiRagdollConnection = nil
+local function startAntiRagdoll()
+    if antiRagdollConnection then return end
+    antiRagdollConnection = RunService.Heartbeat:Connect(function()
+        local char = LocalPlayer.Character
+        if not char then return end
+        local root = char:FindFirstChild("HumanoidRootPart")
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then
+            local state = hum:GetState()
+            if state == Enum.HumanoidStateType.Physics or state == Enum.HumanoidStateType.Ragdoll or state == Enum.HumanoidStateType.FallingDown then
+                hum:ChangeState(Enum.HumanoidStateType.Running)
+                workspace.CurrentCamera.CameraSubject = hum
+                pcall(function()
+                    local PlayerModule = LocalPlayer.PlayerScripts:FindFirstChild("PlayerModule")
+                    if PlayerModule then require(PlayerModule:FindFirstChild("ControlModule")):Enable() end
+                end)
+                if root then root.Velocity = Vector3.zero; root.RotVelocity = Vector3.zero end
+            end
+        end
+        for _, obj in ipairs(char:GetDescendants()) do
+            if obj:IsA("Motor6D") and obj.Enabled == false then obj.Enabled = true end
+        end
+    end)
+end
+local function stopAntiRagdoll()
+    if antiRagdollConnection then antiRagdollConnection:Disconnect(); antiRagdollConnection = nil end
+end
+
+-- ==================== AUTO KICK ON STEAL ====================
+local autoKickConnections = {}
+
+local function startAutoKickAfterSteal()
+    if #autoKickConnections > 0 then return end
+    
+    local keyword = "you stole"
+    local kickMessage = "You stole brainrot!"
+    
+    local function hasKeyword(text)
+        if typeof(text) ~= "string" then return false end
+        return string.find(string.lower(text), keyword) ~= nil
+    end
+    
+    local function kickPlayer()
+        pcall(function()
+            LocalPlayer:Kick(kickMessage)
+        end)
+    end
+
+    local function scanGuiObjects(parent)
+        for _, obj in ipairs(parent:GetDescendants()) do
+            if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox") then
+                if hasKeyword(obj.Text) then 
+                    kickPlayer()
+                    return true 
+                end
+                local conn = obj:GetPropertyChangedSignal("Text"):Connect(function()
+                    if hasKeyword(obj.Text) then 
+                        kickPlayer() 
+                    end
+                end)
+                table.insert(autoKickConnections, conn)
+            end
+        end
+        return false
+    end
+
+    local function setupGuiWatcher(gui)
+        local conn = gui.DescendantAdded:Connect(function(desc)
+            if desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("TextBox") then
+                if hasKeyword(desc.Text) then 
+                    kickPlayer() 
+                end
+                local conn2 = desc:GetPropertyChangedSignal("Text"):Connect(function()
+                    if hasKeyword(desc.Text) then 
+                        kickPlayer() 
+                    end
+                end)
+                table.insert(autoKickConnections, conn2)
+            end
+        end)
+        table.insert(autoKickConnections, conn)
+    end
+
+    for _, gui in ipairs(PlayerGui:GetChildren()) do 
+        setupGuiWatcher(gui) 
+    end
+    
+    local childConn = PlayerGui.ChildAdded:Connect(function(gui)
+        setupGuiWatcher(gui)
+        scanGuiObjects(gui)
+    end)
+    table.insert(autoKickConnections, childConn)
+
+    scanGuiObjects(PlayerGui)
+end
+
+local function stopAutoKickAfterSteal()
+    for _, conn in ipairs(autoKickConnections) do 
+        pcall(function() conn:Disconnect() end) 
+    end
+    autoKickConnections = {}
+end
+
+-- Slow Fall, Anti Bee, Walk Fling, TP Down (unchanged)
+local slowFallEnabled = false
+local slowFallConn = nil
+local function ToggleSlowFall(v)
+    slowFallEnabled = v
+    if v then
+        if slowFallConn then slowFallConn:Disconnect() end
+        slowFallConn = RunService.Heartbeat:Connect(function()
+            if not slowFallEnabled then return end
+            local char = LocalPlayer.Character
+            if not char then return end
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            local root = char:FindFirstChild("HumanoidRootPart")
+            if not humanoid or not root then return end
+            if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                local vel = root.AssemblyLinearVelocity
+                if vel.Y < -1 then root.AssemblyLinearVelocity = Vector3.new(vel.X, vel.Y * 0.5, vel.Z) end
+            end
+        end)
+    else
+        if slowFallConn then slowFallConn:Disconnect(); slowFallConn = nil end
+    end
+end
+
+local ANTI = { enabled = false, connections = {} }
+local BAD = { Blue = true, DiscoEffect = true, BeeBlur = true, ColorCorrection = true }
+local function nuke(obj) if BAD[obj.Name] then pcall(function() obj:Destroy() end) end end
+local function disconnectAll() for _,c in ipairs(ANTI.connections) do if c then c:Disconnect() end end; ANTI.connections = {} end
+local function stopBuzz()
+    pcall(function()
+        local bee = LocalPlayer.PlayerScripts:FindFirstChild("Bee", true)
+        if bee then local sound = bee:FindFirstChild("Buzzing"); if sound then sound:Stop(); sound.Volume = 0 end end
+    end)
+end
+local function ToggleAntiBee(v)
+    if v == ANTI.enabled then return end
+    ANTI.enabled = v
+    if v then
+        for _,obj in ipairs(Lighting:GetDescendants()) do nuke(obj) end
+        local conn1 = Lighting.DescendantAdded:Connect(function(obj) if ANTI.enabled then nuke(obj) end end)
+        local conn2 = RunService.Heartbeat:Connect(function() if ANTI.enabled then stopBuzz() end end)
+        table.insert(ANTI.connections, conn1); table.insert(ANTI.connections, conn2)
+    else disconnectAll() end
+end
+
+local _wfConns = {}
+local _wfActive = false
+local function stopWalkFling()
+    _wfActive = false
+    for _, c in ipairs(_wfConns) do
+        if typeof(c) == "RBXScriptConnection" then c:Disconnect()
+        elseif typeof(c) == "thread" then pcall(task.cancel, c) end
+    end
+    _wfConns = {}
+end
+local function startWalkFling()
+    stopWalkFling()
+    _wfActive = true
+    table.insert(_wfConns, RunService.Stepped:Connect(function()
+        if not _wfActive then return end
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer and p.Character then
+                for _, part in ipairs(p.Character:GetChildren()) do
+                    if part:IsA("BasePart") then part.CanCollide = false end
+                end
+            end
+        end
+    end))
+    local co = coroutine.create(function()
+        while _wfActive do
+            RunService.Heartbeat:Wait()
+            local char = LocalPlayer.Character
+            local root = char and char:FindFirstChild("HumanoidRootPart")
+            if not root then continue end
+            local vel = root.Velocity
+            root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            if root and root.Parent then root.Velocity = vel end
+            RunService.Stepped:Wait()
+            if root and root.Parent then root.Velocity = vel + Vector3.new(0, 0.1, 0) end
+        end
+    end)
+    coroutine.resume(co)
+    table.insert(_wfConns, co)
+end
+
+local function runTPDown()
+    task.spawn(function()
+        pcall(function()
+            local c = LocalPlayer.Character; if not c then return end
+            local hrp = c:FindFirstChild("HumanoidRootPart"); if not hrp then return end
+            local hum = c:FindFirstChildOfClass("Humanoid"); if not hum then return end
+            local rp = RaycastParams.new()
+            rp.FilterDescendantsInstances = {c}
+            rp.FilterType = Enum.RaycastFilterType.Exclude
+            local hit = Workspace:Raycast(hrp.Position, Vector3.new(0, -500, 0), rp)
+            if hit then
+                hrp.AssemblyLinearVelocity = Vector3.zero
+                hrp.AssemblyAngularVelocity = Vector3.zero
+                local hh = hum.HipHeight or 2
+                local hy = hrp.Size.Y / 2
+                hrp.CFrame = CFrame.new(hit.Position.X, hit.Position.Y + hh + hy + 0.1, hit.Position.Z)
+            end
+        end)
+    end)
+end
+
+-- ==================== THEME SYSTEM ====================
+local WHITE = Color3.fromRGB(255, 255, 255)
+
+local themeColors = {
+    White = Color3.fromRGB(255, 255, 255),
+    Red = Color3.fromRGB(255, 60, 60),
+    Blue = Color3.fromRGB(60, 120, 255),
+    Yellow = Color3.fromRGB(255, 220, 60),
+    Green = Color3.fromRGB(60, 255, 100),
+    Pink = Color3.fromRGB(255, 100, 200),
+    Purple = Color3.fromRGB(180, 60, 255),
+    Dark = Color3.fromRGB(180, 180, 180),
+    Galaxy = Color3.fromRGB(110, 120, 255)
+}
+
+local gradientsToRotate = {}
+
+local function getThemeColor()
+    return themeColors[currentTheme] or WHITE
+end
+
+local function applyThemeToElement(elem, isStroke)
+    if not elem then return end
+    local color = getThemeColor()
+    if isStroke then
+        elem.Color = color
+    elseif elem:IsA("TextLabel") or elem:IsA("TextButton") or elem:IsA("TextBox") then
+        elem.TextColor3 = color
+    end
+end
+
+local function updateAllTheme()
+    local screen = ScreenGui
+    if not screen then return end
+    for _, desc in ipairs(screen:GetDescendants()) do
+        if desc:IsA("UIStroke") then
+            applyThemeToElement(desc, true)
+        elseif (desc:IsA("TextLabel") or desc:IsA("TextButton") or desc:IsA("TextBox")) and desc.Name ~= "CenterWatermark" then
+            applyThemeToElement(desc, false)
+        end
+    end
+    if APScreenGui and APScreenGui.Parent then
+        for _, desc in ipairs(APScreenGui:GetDescendants()) do
+            if desc:IsA("UIStroke") then
+                applyThemeToElement(desc, true)
+            elseif desc:IsA("TextLabel") or desc:IsA("TextButton") then
+                applyThemeToElement(desc, false)
+            end
+        end
+    end
+end
+
+local function addSleekStroke(frame)
+    local stroke = Instance.new("UIStroke")
+    stroke.Thickness = 1.5
+    stroke.Color = getThemeColor()
+    stroke.Transparency = 0.4
+    stroke.Parent = frame
+    if currentTheme == "Galaxy" then
+        local strokeGrad = Instance.new("UIGradient")
+        strokeGrad.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(110, 120, 255)),
+            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 110, 180)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 120, 255))
+        })
+        strokeGrad.Parent = stroke
+        table.insert(gradientsToRotate, strokeGrad)
+    end
+    return stroke
+end
+
+task.spawn(function()
+    local tickCount = 0
+    while true do
+        local dt = RunService.RenderStepped:Wait()
+        tickCount = tickCount + dt
+        if currentTheme == "Galaxy" then
+            local newRotation = (tickCount * 45) % 360
+            local newThickness = 1.3 + math.sin(tickCount * 3.5) * 0.25
+            for _, grad in ipairs(gradientsToRotate) do
+                if grad and grad.Parent then
+                    grad.Rotation = newRotation
+                    grad.Parent.Thickness = newThickness
+                end
+            end
+        end
+    end
+end)
+
+local function cycleTheme()
+    local themeList = {"White", "Red", "Blue", "Yellow", "Green", "Pink", "Purple", "Dark", "Galaxy"}
+    local idx = 1
+    for i, t in ipairs(themeList) do
+        if t == currentTheme then idx = i break end
+    end
+    idx = (idx % #themeList) + 1
+    currentTheme = themeList[idx]
+    updateAllTheme()
+    saveSettings()
+end
+
+-- ==================== AP SPAMMER ====================
+local APScreenGui = nil
+local function ToggleAPSpammer(v)
+    if v then
+        if not APScreenGui then
+            APScreenGui = Instance.new("ScreenGui")
+            APScreenGui.Name = "XDS_SPAAMER"
+            APScreenGui.ResetOnSpawn = false
+            APScreenGui.Enabled = true
+            APScreenGui.Parent = PlayerGui
+
+            local APFrame = Instance.new("Frame")
+            APFrame.Name = "MainFrame"
+            APFrame.Size = UDim2.new(0, 185, 0, 235)
+            APFrame.Position = UDim2.new(0.5, -92.5, 0.5, -120)
+            APFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+            APFrame.BorderSizePixel = 0
+            APFrame.Parent = APScreenGui
+            Instance.new("UICorner", APFrame).CornerRadius = UDim.new(0, 12)
+
+            local g = Instance.new("UIGradient")
+            g.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 22, 28)), ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 10, 12))})
+            g.Rotation = 45
+            g.Parent = APFrame
+
+            local APStroke = Instance.new("UIStroke", APFrame)
+            APStroke.Thickness = 1.5
+            APStroke.Color = getThemeColor()
+            APStroke.Transparency = 0.4
+
+            local sg = Instance.new("UIGradient")
+            sg.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(110, 120, 255)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 110, 180)), ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 120, 255))})
+            sg.Parent = APStroke
+
+            local APTitleBar = Instance.new("Frame")
+            APTitleBar.Size = UDim2.new(1, -16, 0, 32)
+            APTitleBar.Position = UDim2.new(0, 8, 0, 6)
+            APTitleBar.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+            APTitleBar.BackgroundTransparency = 0.1
+            APTitleBar.BorderSizePixel = 0
+            APTitleBar.Parent = APFrame
+            Instance.new("UICorner", APTitleBar).CornerRadius = UDim.new(0, 8)
+
+            local APTitleLabel = Instance.new("TextLabel")
+            APTitleLabel.Text = "XDS SPAMMER"
+            APTitleLabel.Size = UDim2.new(1, -24, 1, 0)
+            APTitleLabel.Position = UDim2.new(0, 12, 0, 0)
+            APTitleLabel.BackgroundTransparency = 1
+            APTitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            APTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+            APTitleLabel.Font = Enum.Font.GothamBold
+            APTitleLabel.TextSize = 12
+            APTitleLabel.Parent = APTitleBar
+
+            local apDrag, apDragStart, apStartPos
+            APTitleBar.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    apDrag = true
+                    apDragStart = input.Position
+                    apStartPos = APFrame.Position
+                end
+            end)
+
+            UserInputService.InputChanged:Connect(function(input)
+                if apDrag and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                    local delta = input.Position - apDragStart
+                    APFrame.Position = UDim2.new(apStartPos.X.Scale, apStartPos.X.Offset + delta.X, apStartPos.Y.Scale, apStartPos.Y.Offset + delta.Y)
+                end
+            end)
+
+            UserInputService.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    apDrag = false
+                end
+            end)
+
+            local APScrollFrame = Instance.new("ScrollingFrame")
+            APScrollFrame.Size = UDim2.new(1, -16, 1, -48)
+            APScrollFrame.Position = UDim2.new(0, 8, 0, 44)
+            APScrollFrame.BackgroundTransparency = 1
+            APScrollFrame.ScrollBarThickness = 3
+            APScrollFrame.ScrollBarImageColor3 = getThemeColor()
+            APScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+            APScrollFrame.Parent = APFrame
+
+            local APListLayout = Instance.new("UIListLayout")
+            APListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            APListLayout.Padding = UDim.new(0, 3)
+            APListLayout.Parent = APScrollFrame
+
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local AdminRemote = nil
+            task.spawn(function()
+                if not LocalPlayer.Character then LocalPlayer.CharacterAdded:Wait() end
+                task.wait(1)
+                local ok, net = pcall(function() return ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Net") end)
+                if not ok or not net then return end
+                local children = net:GetChildren()
+                local byIdx, byName = {}, {}
+                for i, obj in ipairs(children) do 
+                    byIdx[i] = obj
+                    byName[obj.Name] = i 
+                end
+                local anchorIdx = byName["RF/a0e78691-cb9b-4efc-ac08-9c06fea70059"]
+                if anchorIdx then
+                    local actual = byIdx[anchorIdx + 1]
+                    if actual then AdminRemote = actual end
+                end
+            end)
+
+            local function fireAdmin(...)
+                if not AdminRemote then return end
+                local args = {...}
+                task.spawn(function()
+                    AdminRemote:InvokeServer(unpack(args))
+                end)
+            end
+
+            local spamCooldown = {}
+            local function spamPlayer(plr)
+                if not AdminRemote or not plr or plr == LocalPlayer then return end
+                local uid = plr.UserId
+                if spamCooldown[uid] and tick() - spamCooldown[uid] < 1.5 then return end
+                spamCooldown[uid] = tick()
+                local char = plr.Character
+                if char then
+                    local hrp = char:FindFirstChild("HumanoidRootPart")
+                    if hrp then hrp.CFrame = CFrame.new(0, 10000, 0) end
+                end
+                fireAdmin("f888ee6e-c86d-46e1-93d7-0639d6635d42", plr, "balloon")
+                fireAdmin("f888ee6e-c86d-46e1-93d7-0639d6635d42", plr, "ragdoll")
+                fireAdmin("f888ee6e-c86d-46e1-93d7-0639d6635d42", plr, "jumpscare")
+                fireAdmin("f888ee6e-c86d-46e1-93d7-0639d6635d42", plr, "rocket")
+                fireAdmin("f888ee6e-c86d-46e1-93d7-0639d6635d42", plr, "jail")
+            end
+
+            local function CreatePlayerCard(plr, order)
+                local Card = Instance.new("TextButton")
+                Card.Name = "Card_" .. plr.Name
+                Card.Size = UDim2.new(1, -6, 0, 37)
+                Card.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
+                Card.BorderSizePixel = 0
+                Card.LayoutOrder = order
+                Card.Text = ""
+                Card.AutoButtonColor = false
+                Card.Parent = APScrollFrame
+                Instance.new("UICorner", Card).CornerRadius = UDim.new(0, 8)
+
+                local cardStroke = Instance.new("UIStroke", Card)
+                cardStroke.Thickness = 1
+                cardStroke.Color = getThemeColor()
+                cardStroke.Transparency = 0.7
+
+                Card.MouseEnter:Connect(function()
+                    TweenService:Create(Card, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(38, 38, 48)}):Play()
+                    TweenService:Create(cardStroke, TweenInfo.new(0.15), {Transparency = 0.3}):Play()
+                end)
+                Card.MouseLeave:Connect(function()
+                    TweenService:Create(Card, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(22, 22, 28)}):Play()
+                    TweenService:Create(cardStroke, TweenInfo.new(0.15), {Transparency = 0.7}):Play()
+                end)
+
+                Card.MouseButton1Click:Connect(function()
+                    TweenService:Create(Card, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(80, 90, 220)}):Play()
+                    task.delay(0.25, function() TweenService:Create(Card, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(22, 22, 28)}):Play() end)
+                    spamPlayer(plr)
+                end)
+
+                local PfpFrame = Instance.new("Frame")
+                PfpFrame.Size = UDim2.new(0, 28, 0, 28)
+                PfpFrame.Position = UDim2.new(0, 6, 0.5, -14)
+                PfpFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+                PfpFrame.BorderSizePixel = 0
+                PfpFrame.Parent = Card
+                Instance.new("UICorner", PfpFrame).CornerRadius = UDim.new(0, 6)
+
+                local PfpImage = Instance.new("ImageLabel")
+                PfpImage.Size = UDim2.new(1, 0, 1, 0)
+                PfpImage.BackgroundTransparency = 1
+                PfpImage.Parent = PfpFrame
+                Instance.new("UICorner", PfpImage).CornerRadius = UDim.new(0, 6)
+
+                task.spawn(function()
+                    local success, content = pcall(function()
+                        return Players:GetUserThumbnailAsync(plr.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+                    end)
+                    if success and content then PfpImage.Image = content end
+                end)
+
+                local DisplayName = Instance.new("TextLabel")
+                DisplayName.Size = UDim2.new(1, -44, 0, 14)
+                DisplayName.Position = UDim2.new(0, 40, 0, 5)
+                DisplayName.BackgroundTransparency = 1
+                DisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
+                DisplayName.TextXAlignment = Enum.TextXAlignment.Left
+                DisplayName.Font = Enum.Font.GothamBold
+                DisplayName.TextSize = 11
+                DisplayName.TextTruncate = Enum.TextTruncate.AtEnd
+                DisplayName.Text = plr.DisplayName
+                DisplayName.Parent = Card
+
+                local Username = Instance.new("TextLabel")
+                Username.Size = UDim2.new(1, -44, 0, 12)
+                Username.Position = UDim2.new(0, 40, 0, 19)
+                Username.BackgroundTransparency = 1
+                Username.TextColor3 = Color3.fromRGB(150, 155, 200)
+                Username.TextXAlignment = Enum.TextXAlignment.Left
+                Username.Font = Enum.Font.Gotham
+                Username.TextSize = 9
+                Username.TextTruncate = Enum.TextTruncate.AtEnd
+                Username.Text = "@" .. plr.Name
+                Username.Parent = Card
+            end
+
+            local function RefreshPlayerList()
+                for _, child in ipairs(APScrollFrame:GetChildren()) do
+                    if child:IsA("TextButton") then child:Destroy() end
+                end
+                local order = 0
+                for _, plr in ipairs(Players:GetPlayers()) do
+                    if plr ~= LocalPlayer then
+                        order += 1
+                        CreatePlayerCard(plr, order)
+                    end
+                end
+            end
+
+            RefreshPlayerList()
+            Players.PlayerAdded:Connect(function() task.wait(0.5); RefreshPlayerList() end)
+            Players.PlayerRemoving:Connect(function() task.wait(0.5); RefreshPlayerList() end)
+        else
+            APScreenGui.Enabled = true
+        end
+    elseif APScreenGui then
+        APScreenGui.Enabled = false
+    end
+end
+
+-- ==================== GUI ====================
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "XDS Flash TP V7.1"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = PlayerGui
+
+local DARK_BG = Color3.fromRGB(15, 15, 15)
+local MID_GRAY = Color3.fromRGB(32, 32, 32)
+local GRAY = Color3.fromRGB(180, 180, 180)
+
+-- Mobile Buttons
+local MobileContainer = Instance.new("Frame")
+MobileContainer.Size = UDim2.new(0, 110, 0, 220)
+MobileContainer.Position = UDim2.new(1, -130, 0.5, -110)
+MobileContainer.BackgroundTransparency = 1
+MobileContainer.Parent = ScreenGui
+
+local rstMobBtn = Instance.new("TextButton")
+rstMobBtn.Size = UDim2.new(0, 46, 0, 46)
+rstMobBtn.Position = UDim2.new(0, 0, 0, 0)
+rstMobBtn.BackgroundColor3 = DARK_BG
+rstMobBtn.BackgroundTransparency = 0.2
+rstMobBtn.Text = "RST"
+rstMobBtn.TextColor3 = WHITE
+rstMobBtn.Font = Enum.Font.GothamBold
+rstMobBtn.TextSize = 11
+rstMobBtn.Visible = false
+rstMobBtn.Parent = MobileContainer
+Instance.new("UICorner", rstMobBtn).CornerRadius = UDim.new(1, 0)
+local rstStroke = Instance.new("UIStroke", rstMobBtn)
+rstStroke.Color = WHITE
+rstStroke.Thickness = 1.5
+rstStroke.Transparency = 0.5
+rstMobBtn.MouseButton1Click:Connect(instantReset)
+
+local dropMobBtn = Instance.new("TextButton")
+dropMobBtn.Size = UDim2.new(0, 46, 0, 46)
+dropMobBtn.Position = UDim2.new(0, 62, 0, 0)
+dropMobBtn.BackgroundColor3 = DARK_BG
+dropMobBtn.BackgroundTransparency = 0.2
+dropMobBtn.Text = "DROP"
+dropMobBtn.TextColor3 = WHITE
+dropMobBtn.Font = Enum.Font.GothamBold
+dropMobBtn.TextSize = 10
+dropMobBtn.Visible = false
+dropMobBtn.Parent = MobileContainer
+Instance.new("UICorner", dropMobBtn).CornerRadius = UDim.new(1, 0)
+local dropStroke = Instance.new("UIStroke", dropMobBtn)
+dropStroke.Color = WHITE
+dropStroke.Thickness = 1.5
+dropStroke.Transparency = 0.5
+dropMobBtn.MouseButton1Click:Connect(function()
+    startWalkFling()
+    task.delay(0.6, stopWalkFling)
+end)
+
+local rjnMobBtn = Instance.new("TextButton")
+rjnMobBtn.Size = UDim2.new(0, 46, 0, 46)
+rjnMobBtn.Position = UDim2.new(0, 0, 0, 62)
+rjnMobBtn.BackgroundColor3 = DARK_BG
+rjnMobBtn.BackgroundTransparency = 0.2
+rjnMobBtn.Text = "RJN"
+rjnMobBtn.TextColor3 = WHITE
+rjnMobBtn.Font = Enum.Font.GothamBold
+rjnMobBtn.TextSize = 11
+rjnMobBtn.Visible = false
+rjnMobBtn.Parent = MobileContainer
+Instance.new("UICorner", rjnMobBtn).CornerRadius = UDim.new(1, 0)
+local rjnStroke = Instance.new("UIStroke", rjnMobBtn)
+rjnStroke.Color = WHITE
+rjnStroke.Thickness = 1.5
+rjnStroke.Transparency = 0.5
+rjnMobBtn.MouseButton1Click:Connect(rejoin)
+
+local kckMobBtn = Instance.new("TextButton")
+kckMobBtn.Size = UDim2.new(0, 46, 0, 46)
+kckMobBtn.Position = UDim2.new(0, 62, 0, 62)
+kckMobBtn.BackgroundColor3 = DARK_BG
+kckMobBtn.BackgroundTransparency = 0.2
+kckMobBtn.Text = "KCK"
+kckMobBtn.TextColor3 = WHITE
+kckMobBtn.Font = Enum.Font.GothamBold
+kckMobBtn.TextSize = 11
+kckMobBtn.Visible = false
+kckMobBtn.Parent = MobileContainer
+Instance.new("UICorner", kckMobBtn).CornerRadius = UDim.new(1, 0)
+local kckStroke = Instance.new("UIStroke", kckMobBtn)
+kckStroke.Color = WHITE
+kckStroke.Thickness = 1.5
+kckStroke.Transparency = 0.5
+kckMobBtn.MouseButton1Click:Connect(function() game:Shutdown() end)
+
+local tpDownMobBtn = Instance.new("TextButton")
+tpDownMobBtn.Size = UDim2.new(0, 46, 0, 46)
+tpDownMobBtn.Position = UDim2.new(0, 0, 0, 124)
+tpDownMobBtn.BackgroundColor3 = DARK_BG
+tpDownMobBtn.BackgroundTransparency = 0.2
+tpDownMobBtn.Text = "TP↓"
+tpDownMobBtn.TextColor3 = WHITE
+tpDownMobBtn.Font = Enum.Font.GothamBold
+tpDownMobBtn.TextSize = 11
+tpDownMobBtn.Visible = false
+tpDownMobBtn.Parent = MobileContainer
+Instance.new("UICorner", tpDownMobBtn).CornerRadius = UDim.new(1, 0)
+local tpStroke = Instance.new("UIStroke", tpDownMobBtn)
+tpStroke.Color = WHITE
+tpStroke.Thickness = 1.5
+tpStroke.Transparency = 0.5
+tpDownMobBtn.MouseButton1Click:Connect(runTPDown)
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 182, 0, 255)
+MainFrame.Position = UDim2.new(0.5, -91, 0.5, -130)
+MainFrame.BackgroundColor3 = DARK_BG
+MainFrame.BackgroundTransparency = 0.05
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Thickness = 1.5
+mainStroke.Color = getThemeColor()
+mainStroke.Transparency = 0.6
+mainStroke.Parent = MainFrame
+
+local TitleBar = Instance.new("Frame")
+TitleBar.Size = UDim2.new(1, -16, 0, 38)
+TitleBar.Position = UDim2.new(0, 8, 0, 8)
+TitleBar.BackgroundColor3 = MID_GRAY
+TitleBar.BackgroundTransparency = 0.1
+TitleBar.Parent = MainFrame
+Instance.new("UICorner", TitleBar).CornerRadius = UDim.new(0, 8)
+
+local TitleLbl = Instance.new("TextLabel")
+TitleLbl.Size = UDim2.new(1, 0, 1, 0)
+TitleLbl.BackgroundTransparency = 1
+TitleLbl.Text = "XDS FLASH TP"
+TitleLbl.TextColor3 = WHITE
+TitleLbl.Font = Enum.Font.GothamBold
+TitleLbl.TextSize = 16
+TitleLbl.Parent = TitleBar
+
+local PingLabel = Instance.new("TextLabel")
+PingLabel.Size = UDim2.new(1, 0, 0, 12)
+PingLabel.Position = UDim2.new(0, 0, 0, 30)
+PingLabel.BackgroundTransparency = 1
+PingLabel.Text = "PING: --"
+PingLabel.TextColor3 = GRAY
+PingLabel.Font = Enum.Font.Gotham
+PingLabel.TextSize = 9
+PingLabel.Parent = TitleBar
+
+local HelpBtn = Instance.new("TextButton")
+HelpBtn.Size = UDim2.new(0, 20, 0, 20)
+HelpBtn.Position = UDim2.new(0, 12, 0, 8)
+HelpBtn.BackgroundColor3 = MID_GRAY
+HelpBtn.Text = "?"
+HelpBtn.TextColor3 = WHITE
+HelpBtn.Font = Enum.Font.GothamBold
+HelpBtn.TextSize = 14
+HelpBtn.Parent = MainFrame
+Instance.new("UICorner", HelpBtn).CornerRadius = UDim.new(0, 4)
+
+local HelpGui = Instance.new("ScreenGui")
+HelpGui.Name = "NovaHelp"
+HelpGui.ResetOnSpawn = false
+HelpGui.Enabled = false
+HelpGui.Parent = PlayerGui
+local HelpFrame = Instance.new("Frame", HelpGui)
+HelpFrame.Size = UDim2.new(0, 260, 0, 180)
+HelpFrame.Position = UDim2.new(0.5, -130, 0.5, -90)
+HelpFrame.BackgroundColor3 = DARK_BG
+Instance.new("UICorner", HelpFrame).CornerRadius = UDim.new(0, 8)
+local HelpTitle = Instance.new("TextLabel", HelpFrame)
+HelpTitle.Size = UDim2.new(1, 0, 0, 30)
+HelpTitle.Text = "Help / Info"
+HelpTitle.TextColor3 = WHITE
+HelpTitle.BackgroundTransparency = 1
+HelpTitle.Font = Enum.Font.GothamBold
+HelpTitle.TextSize = 14
+local HelpText = Instance.new("TextLabel", HelpFrame)
+HelpText.Size = UDim2.new(1, -20, 1, -50)
+HelpText.Position = UDim2.new(0, 10, 0, 35)
+HelpText.BackgroundTransparency = 1
+HelpText.Text = "Best of free flash tps oat\nInspired Gui by nova\nMade by 06.xd : Server /pjuj99ure5\n\nFlash trigger 91-92\nLagger power 30-40"
+HelpText.TextColor3 = WHITE
+HelpText.Font = Enum.Font.Gotham
+HelpText.TextSize = 11
+HelpText.TextXAlignment = Enum.TextXAlignment.Left
+HelpText.TextYAlignment = Enum.TextYAlignment.Top
+
+HelpBtn.MouseButton1Click:Connect(function()
+    HelpGui.Enabled = not HelpGui.Enabled
+end)
+
+local SettingsFrame = Instance.new("Frame")
+SettingsFrame.Size = UDim2.new(0, 182, 0, 295)
+SettingsFrame.Position = UDim2.new(0, -192, 0, 0)
+SettingsFrame.BackgroundColor3 = DARK_BG
+SettingsFrame.BackgroundTransparency = 0.05
+SettingsFrame.BorderSizePixel = 0
+SettingsFrame.Visible = false
+SettingsFrame.Parent = MainFrame
+Instance.new("UICorner", SettingsFrame).CornerRadius = UDim.new(0, 12)
+local settingsStroke = mainStroke:Clone()
+settingsStroke.Parent = SettingsFrame
+
+local SettingsTitleBar = Instance.new("Frame")
+SettingsTitleBar.Size = UDim2.new(1, -16, 0, 38)
+SettingsTitleBar.Position = UDim2.new(0, 8, 0, 8)
+SettingsTitleBar.BackgroundColor3 = MID_GRAY
+SettingsTitleBar.BackgroundTransparency = 0.1
+SettingsTitleBar.Parent = SettingsFrame
+Instance.new("UICorner", SettingsTitleBar).CornerRadius = UDim.new(0, 8)
+
+local SettingsTitleLbl = Instance.new("TextLabel")
+SettingsTitleLbl.Size = UDim2.new(1, 0, 1, 0)
+SettingsTitleLbl.BackgroundTransparency = 1
+SettingsTitleLbl.Text = "TOGGLES"
+SettingsTitleLbl.TextColor3 = WHITE
+SettingsTitleLbl.Font = Enum.Font.GothamBold
+SettingsTitleLbl.TextSize = 15
+SettingsTitleLbl.Parent = SettingsTitleBar
+
+local SettingsScroll = Instance.new("ScrollingFrame")
+SettingsScroll.Size = UDim2.new(1, -16, 1, -60)
+SettingsScroll.Position = UDim2.new(0, 8, 0, 52)
+SettingsScroll.BackgroundTransparency = 1
+SettingsScroll.BorderSizePixel = 0
+SettingsScroll.ScrollBarThickness = 2
+SettingsScroll.ScrollBarImageColor3 = WHITE
+SettingsScroll.CanvasSize = UDim2.new(0, 0, 0, 520)
+SettingsScroll.Parent = SettingsFrame
+
+local function createParticles(parent)
+    local particleContainer = Instance.new("Frame")
+    particleContainer.Name = "Particles"
+    particleContainer.Size = UDim2.new(1, 0, 1, 0)
+    particleContainer.BackgroundTransparency = 1
+    particleContainer.ZIndex = 0
+    particleContainer.Parent = parent
+
+    local particles = {}
+    local function createParticle()
+        local p = Instance.new("Frame")
+        p.Size = UDim2.new(0, math.random(1,3), 0, math.random(1,3))
+        p.BackgroundColor3 = WHITE
+        p.BackgroundTransparency = 0.55 + math.random() * 0.35
+        p.BorderSizePixel = 0
+        p.ZIndex = 0
+        p.Parent = particleContainer
+        return p
+    end
+
+    for i = 1, 22 do
+        local p = createParticle()
+        p.Position = UDim2.new(math.random(), 0, math.random(), 0)
+        table.insert(particles, p)
+    end
+
+    RunService.Heartbeat:Connect(function()
+        if not particleContainer.Parent then return end
+        for _, p in ipairs(particles) do
+            local x = p.Position.X.Scale + (math.random() - 0.5) * 0.0009
+            local y = p.Position.Y.Scale - 0.00045
+            if y < 0 then y = 1 end
+            if x < 0 or x > 1 then x = math.random() end
+            p.Position = UDim2.new(math.clamp(x, 0, 1), 0, y, 0)
+        end
+    end)
+end
+
+createParticles(MainFrame)
+createParticles(SettingsFrame)
+
+local CenterText = Instance.new("TextLabel")
+CenterText.Name = "CenterWatermark"
+CenterText.Size = UDim2.new(0, 200, 0, 30)
+CenterText.Position = UDim2.new(0.5, -100, 0.5, -15)
+CenterText.BackgroundTransparency = 1
+CenterText.Text = "/pjuj99ure5"
+CenterText.TextColor3 = GRAY
+CenterText.Font = Enum.Font.GothamBold
+CenterText.TextSize = 14
+CenterText.TextTransparency = 0.4
+CenterText.ZIndex = 100
+CenterText.Parent = ScreenGui
+
+local GearButton = Instance.new("TextButton")
+GearButton.Size = UDim2.new(0, 28, 0, 28)
+GearButton.Position = UDim2.new(0, 12, 0, 13)
+GearButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+GearButton.Text = "⚙"
+GearButton.TextColor3 = WHITE
+GearButton.Font = Enum.Font.GothamBold
+GearButton.TextSize = 18
+GearButton.Parent = MainFrame
+Instance.new("UICorner", GearButton).CornerRadius = UDim.new(0, 8)
+
+local gearStroke = Instance.new("UIStroke")
+gearStroke.Thickness = 1.5
+gearStroke.Color = getThemeColor()
+gearStroke.Transparency = 0.4
+gearStroke.Parent = GearButton
+
+GearButton.MouseButton1Click:Connect(function()
+    SettingsFrame.Visible = not SettingsFrame.Visible
+end)
+
+local function roundToHalf(val)
+    return math.round(val * 2) / 2
+end
+
+local speedToggleUI, fovToggleUI
+
+local function makeToggle(labelText, yPos, targetParent, isPureUi, extraAction, options)
+    local parentFrame = targetParent or SettingsScroll
+    local lbl = Instance.new("TextLabel")
+    lbl.Size = UDim2.new(0.5, 0, 0, 18)
+    lbl.Position = UDim2.new(0.08, 0, 0, yPos)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = labelText
+    lbl.TextColor3 = WHITE
+    lbl.Font = Enum.Font.GothamBold
+    lbl.TextSize = 11
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+    lbl.Parent = parentFrame
+
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 34, 0, 17)
+    btn.Position = UDim2.new(0.98, -36, 0, yPos + 1)
+    btn.BackgroundColor3 = MID_GRAY
+    btn.Text = ""
+    btn.AutoButtonColor = false
+    btn.Parent = parentFrame
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(1, 0)
+
+    local toggleStroke = Instance.new("UIStroke")
+    toggleStroke.Thickness = 1.5
+    toggleStroke.Color = getThemeColor()
+    toggleStroke.Transparency = 0.45
+    toggleStroke.Parent = btn
+
+    local knob = Instance.new("Frame")
+    knob.Size = UDim2.new(0, 13, 0, 13)
+    knob.Position = UDim2.new(0, 2, 0.5, -6.5)
+    knob.BackgroundColor3 = WHITE
+    knob.Parent = btn
+    Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
+
+    local returnTable = { ToggleBtn = btn }
+
+    if options then
+        if options.type == "TextBox" then
+            local box = Instance.new("TextBox")
+            box.Size = UDim2.new(0, 26, 0, 16)
+            box.Position = UDim2.new(0.98, -66, 0, yPos + 1)
+            box.BackgroundColor3 = MID_GRAY
+            box.Text = options.defaultText
+            box.TextColor3 = WHITE
+            box.Font = Enum.Font.GothamBold
+            box.TextSize = 10
+            box.Parent = parentFrame
+            Instance.new("UICorner", box).CornerRadius = UDim.new(0, 4)
+            local bs = Instance.new("UIStroke", box)
+            bs.Color = getThemeColor()
+            bs.Thickness = 1
+            bs.Transparency = 0.45
+            box.FocusLost:Connect(function()
+                if options.onBoxFocusLost then options.onBoxFocusLost(box.Text) end
+            end)
+            returnTable.TextBox = box
+        elseif options.type == "Keybind" then
+            local bindBtn = Instance.new("TextButton")
+            bindBtn.Size = UDim2.new(0, 30, 0, 16)
+            bindBtn.Position = UDim2.new(0.98, -70, 0, yPos + 1)
+            bindBtn.BackgroundColor3 = MID_GRAY
+            bindBtn.Text = "[" .. options.defaultKey.Name .. "]"
+            bindBtn.TextColor3 = WHITE
+            bindBtn.Font = Enum.Font.GothamBold
+            bindBtn.TextSize = 10
+            bindBtn.Parent = parentFrame
+            Instance.new("UICorner", bindBtn).CornerRadius = UDim.new(0, 4)
+            local bs = Instance.new("UIStroke", bindBtn)
+            bs.Color = getThemeColor()
+            bs.Thickness = 1
+            bs.Transparency = 0.45
+            bindBtn.MouseButton1Click:Connect(function()
+                if options.bindSetter then
+                    options.bindSetter(true)
+                    bindBtn.Text = "..."
+                end
+            end)
+            returnTable.BindBtn = bindBtn
+        end
+    end
+
+    local state = toggleStates[labelText] or false
+    toggleStates[labelText] = state
+    if state then
+        btn.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        knob.Position = UDim2.new(1, -15, 0.5, -6.5)
+        toggleStroke.Transparency = 0.15
+    end
+
+    btn.MouseButton1Click:Connect(function()
+        state = not state
+        toggleStates[labelText] = state
+        local t = TweenInfo.new(0.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+        if state then
+            TweenService:Create(btn, t, {BackgroundColor3 = Color3.fromRGB(55, 55, 55)}):Play()
+            TweenService:Create(knob, t, {Position = UDim2.new(1, -15, 0.5, -6.5)}):Play()
+            TweenService:Create(toggleStroke, t, {Transparency = 0.15}):Play()
+        else
+            TweenService:Create(btn, t, {BackgroundColor3 = MID_GRAY}):Play()
+            TweenService:Create(knob, t, {Position = UDim2.new(0, 2, 0.5, -6.5)}):Play()
+            TweenService:Create(toggleStroke, t, {Transparency = 0.45}):Play()
+        end
+        saveSettings()
+        if isPureUi then
+            if extraAction then extraAction(state) end
+            return
+        end
+        if labelText == "Speed Boost" then
+            if state then enableSpeedBoost() else disableSpeedBoost() end
+        elseif labelText == "Camera Move" then
+            if state then enableFovChanger() else disableFovChanger() end
+        elseif labelText == "Transparency" then
+            if state then startTransparency() else stopTransparency() end
+        elseif labelText == "Anti Ragdoll" then
+            if state then startAntiRagdoll() else stopAntiRagdoll() end
+        elseif labelText == "Kick on Steal" then
+            if state then startAutoKickAfterSteal() else stopAutoKickAfterSteal() end
+        elseif labelText == "Slow Fall" then
+            ToggleSlowFall(state)
+        elseif labelText == "Anti Bee & Disco" then
+            ToggleAntiBee(state)
+        elseif labelText == "AP Spammer" then
+            ToggleAPSpammer(state)
+        elseif labelText == "Inf Jump" then
+            if state then startInfJump() else stopInfJump() end
+        end
+        if extraAction then extraAction(state) end
+    end)
+    return returnTable
+end
+
+local yPos = 10
+
+local helperLabel = Instance.new("TextLabel")
+helperLabel.Size = UDim2.new(1, -16, 0, 18)
+helperLabel.Position = UDim2.new(0, 8, 0, yPos)
+helperLabel.BackgroundTransparency = 1
+helperLabel.Text = "HELPER"
+helperLabel.TextColor3 = WHITE
+helperLabel.Font = Enum.Font.GothamBold
+helperLabel.TextSize = 13
+helperLabel.TextXAlignment = Enum.TextXAlignment.Left
+helperLabel.Parent = SettingsScroll
+yPos = yPos + 25
+
+local divider1 = Instance.new("Frame")
+divider1.Size = UDim2.new(0.9, 0, 0, 1)
+divider1.Position = UDim2.new(0.05, 0, 0, yPos)
+divider1.BackgroundColor3 = MID_GRAY
+divider1.BorderSizePixel = 0
+divider1.Parent = SettingsScroll
+yPos = yPos + 10
+
+speedToggleUI = makeToggle("Speed Boost", yPos, SettingsScroll, false, nil, {
+    type = "TextBox",
+    defaultText = tostring(math.floor(speedBoostMax)),
+    onBoxFocusLost = function(txt)
+        local val = tonumber(txt)
+        if val then 
+            speedBoostMax = math.clamp(val, 16, 60)
+            saveSettings()
+            if toggleStates["Speed Boost"] then enableSpeedBoost() end
+        end
+    end
+})
+yPos = yPos + 25
+
+makeToggle("Camera Move", yPos, SettingsScroll, false, nil, {
+    type = "TextBox",
+    defaultText = tostring(math.floor(targetFovValue)),
+    onBoxFocusLost = function(txt)
+        local val = tonumber(txt)
+        if val then 
+            targetFovValue = math.clamp(val, 30, 120)
+            saveSettings()
+            if toggleStates["Camera Move"] then enableFovChanger() end
+        end
+    end
+})
+yPos = yPos + 25
+
+makeToggle("Transparency", yPos, SettingsScroll, true, function(state)
+    if state then startTransparency() else stopTransparency() end
+end, {
+    type = "TextBox",
+    defaultText = tostring(TARGET_TRANSPARENCY),
+    onBoxFocusLost = function(txt)
+        local num = tonumber(txt)
+        if num and num >= 0 and num <= 1 then
+            TARGET_TRANSPARENCY = num
+            if toggleStates["Transparency"] then applyTransparency() end
+            saveSettings()
+        end
+    end
+})
+yPos = yPos + 25
+
+makeToggle("Anti Ragdoll", yPos, SettingsScroll, true)
+yPos = yPos + 25
+makeToggle("Kick on Steal", yPos, SettingsScroll, true)
+yPos = yPos + 25
+makeToggle("Slow Fall", yPos, SettingsScroll, true, ToggleSlowFall)
+yPos = yPos + 25
+makeToggle("Anti Bee & Disco", yPos, SettingsScroll, true, ToggleAntiBee)
+yPos = yPos + 25
+makeToggle("AP Spammer", yPos, SettingsScroll, true, ToggleAPSpammer)
+yPos = yPos + 25
+makeToggle("Inf Jump", yPos, SettingsScroll, true, function(state) if state then startInfJump() else stopInfJump() end end)
+yPos = yPos + 35
+
+local buttonsLabel = Instance.new("TextLabel")
+buttonsLabel.Size = UDim2.new(1, -16, 0, 18)
+buttonsLabel.Position = UDim2.new(0, 8, 0, yPos)
+buttonsLabel.BackgroundTransparency = 1
+buttonsLabel.Text = "BUTTONS"
+buttonsLabel.TextColor3 = WHITE
+buttonsLabel.Font = Enum.Font.GothamBold
+buttonsLabel.TextSize = 13
+buttonsLabel.TextXAlignment = Enum.TextXAlignment.Left
+buttonsLabel.Parent = SettingsScroll
+yPos = yPos + 25
+
+local divider2 = Instance.new("Frame")
+divider2.Size = UDim2.new(0.9, 0, 0, 1)
+divider2.Position = UDim2.new(0.05, 0, 0, yPos)
+divider2.BackgroundColor3 = MID_GRAY
+divider2.BorderSizePixel = 0
+divider2.Parent = SettingsScroll
+yPos = yPos + 10
+
+local resetToggleUI = makeToggle("Reset", yPos, SettingsScroll, true, function(state) rstMobBtn.Visible = state end, {
+    type = "Keybind", defaultKey = resetKeybind, bindSetter = function(v) bindingResetKey = v end
+})
+yPos = yPos + 25
+
+local dropToggleUI = makeToggle("Drop Button", yPos, SettingsScroll, true, function(state) dropMobBtn.Visible = state end, {
+    type = "Keybind", defaultKey = dropKeybind, bindSetter = function(v) bindingDropKey = v end
+})
+yPos = yPos + 25
+
+local rejoinToggleUI = makeToggle("Rejoin", yPos, SettingsScroll, true, function(state) rjnMobBtn.Visible = state end, {
+    type = "Keybind", defaultKey = rejoinKeybind, bindSetter = function(v) bindingRejoinKey = v end
+})
+yPos = yPos + 25
+
+local kickToggleUI = makeToggle("Kick", yPos, SettingsScroll, true, function(state) kckMobBtn.Visible = state end, {
+    type = "Keybind", defaultKey = kickKeybind, bindSetter = function(v) bindingKickKey = v end
+})
+yPos = yPos + 25
+
+local tpDownToggleUI = makeToggle("TP Down Button", yPos, SettingsScroll, true, function(state) tpDownMobBtn.Visible = state end, {
+    type = "Keybind", defaultKey = tpDownKeybind, bindSetter = function(v) bindingTpDownKey = v end
+})
+yPos = yPos + 25
+
+local themeLabel = Instance.new("TextLabel")
+themeLabel.Size = UDim2.new(1, -16, 0, 18)
+themeLabel.Position = UDim2.new(0, 8, 0, yPos)
+themeLabel.BackgroundTransparency = 1
+themeLabel.Text = "THEME"
+themeLabel.TextColor3 = WHITE
+themeLabel.Font = Enum.Font.GothamBold
+themeLabel.TextSize = 13
+themeLabel.TextXAlignment = Enum.TextXAlignment.Left
+themeLabel.Parent = SettingsScroll
+yPos = yPos + 25
+
+local themeBtn = Instance.new("TextButton")
+themeBtn.Size = UDim2.new(0.7, 0, 0, 24)
+themeBtn.Position = UDim2.new(0.15, 0, 0, yPos)
+themeBtn.BackgroundColor3 = MID_GRAY
+themeBtn.Text = "< " .. currentTheme .. " >"
+themeBtn.TextColor3 = WHITE
+themeBtn.Font = Enum.Font.GothamBold
+themeBtn.TextSize = 12
+themeBtn.Parent = SettingsScroll
+Instance.new("UICorner", themeBtn).CornerRadius = UDim.new(0, 6)
+addSleekStroke(themeBtn)
+
+themeBtn.MouseButton1Click:Connect(function()
+    cycleTheme()
+    themeBtn.Text = "< " .. currentTheme .. " >"
+end)
+
+makeToggle("Auto Potion", 45, MainFrame)
+makeToggle("Lagger on Steal", 70, MainFrame)
+
+local AlignUpBtn = Instance.new("TextButton")
+AlignUpBtn.Size = UDim2.new(0.64, 0, 0, 23)
+AlignUpBtn.Position = UDim2.new(0.06, 0, 0, 100)
+AlignUpBtn.BackgroundColor3 = MID_GRAY
+AlignUpBtn.Text = "ALIGN UP"
+AlignUpBtn.TextColor3 = WHITE
+AlignUpBtn.Font = Enum.Font.GothamBold
+AlignUpBtn.TextSize = 12
+AlignUpBtn.Parent = MainFrame
+Instance.new("UICorner", AlignUpBtn).CornerRadius = UDim.new(0, 6)
+addSleekStroke(AlignUpBtn)
+AlignUpBtn.MouseButton1Click:Connect(ExecuteAlign)
+
+local AlignKeybindBtn = Instance.new("TextButton")
+AlignKeybindBtn.Size = UDim2.new(0.24, 0, 0, 23)
+AlignKeybindBtn.Position = UDim2.new(0.72, 0, 0, 100)
+AlignKeybindBtn.BackgroundColor3 = MID_GRAY
+AlignKeybindBtn.Text = "[" .. alignKey.Name .. "]"
+AlignKeybindBtn.TextColor3 = WHITE
+AlignKeybindBtn.Font = Enum.Font.GothamBold
+AlignKeybindBtn.TextSize = 11
+AlignKeybindBtn.Parent = MainFrame
+Instance.new("UICorner", AlignKeybindBtn).CornerRadius = UDim.new(0, 6)
+addSleekStroke(AlignKeybindBtn)
+
+AlignKeybindBtn.MouseButton1Click:Connect(function()
+    bindingAlignKey = true
+    AlignKeybindBtn.Text = "..."
+end)
+
+local flashSection = Instance.new("Frame")
+flashSection.Size = UDim2.new(0.88, 0, 0, 34)
+flashSection.Position = UDim2.new(0.06, 0, 0, 130)
+flashSection.BackgroundTransparency = 1
+flashSection.Parent = MainFrame
+
+local flashLabel = Instance.new("TextLabel", flashSection)
+flashLabel.Size = UDim2.new(1,0,0,12)
+flashLabel.Text = "FLASH START %"
+flashLabel.TextColor3 = WHITE
+flashLabel.Font = Enum.Font.GothamBold
+flashLabel.TextSize = 10
+flashLabel.TextXAlignment = Enum.TextXAlignment.Center
+flashLabel.BackgroundTransparency = 1
+
+local percentLabel = Instance.new("TextLabel", flashSection)
+percentLabel.Size = UDim2.new(1, 0, 0, 14)
+percentLabel.Position = UDim2.new(0, 0, 0, 12)
+percentLabel.Text = string.format("%.1f%%", sliderValue * 100)
+percentLabel.TextColor3 = WHITE
+percentLabel.Font = Enum.Font.GothamBold
+percentLabel.TextSize = 11
+percentLabel.TextXAlignment = Enum.TextXAlignment.Center
+percentLabel.BackgroundTransparency = 1
+
+local flashBox = Instance.new("TextBox")
+flashBox.Size = UDim2.new(0, 22, 0, 16)
+flashBox.Position = UDim2.new(1, -26, 0, 12)
+flashBox.BackgroundColor3 = MID_GRAY
+flashBox.Text = string.format("%.1f", sliderValue * 100)
+flashBox.TextColor3 = WHITE
+flashBox.Font = Enum.Font.GothamBold
+flashBox.TextSize = 10
+flashBox.Parent = flashSection
+Instance.new("UICorner", flashBox).CornerRadius = UDim.new(0, 4)
+local s = Instance.new("UIStroke", flashBox)
+s.Color = getThemeColor()
+s.Thickness = 1
+s.Transparency = 0.45
+
+local flashTrack = Instance.new("Frame", flashSection)
+flashTrack.Size = UDim2.new(1,0,0,4)
+flashTrack.Position = UDim2.new(0,0,0,29)
+flashTrack.BackgroundColor3 = MID_GRAY
+Instance.new("UICorner", flashTrack).CornerRadius = UDim.new(1,0)
+
+local flashFill = Instance.new("Frame", flashTrack)
+flashFill.Size = UDim2.new(sliderValue,0,1,0)
+flashFill.BackgroundColor3 = getThemeColor()
+Instance.new("UICorner", flashFill).CornerRadius = UDim.new(1,0)
+
+local flashKnob = Instance.new("Frame", flashTrack)
+flashKnob.Size = UDim2.new(0,10,0,10)
+flashKnob.Position = UDim2.new(sliderValue,-5,0.5,-5)
+flashKnob.BackgroundColor3 = WHITE
+Instance.new("UICorner", flashKnob).CornerRadius = UDim.new(1,0)
+Instance.new("UIStroke", flashKnob).Color = getThemeColor()
+
+local function updateFlash(v, skipBoxUpdate)
+    local rounded = math.round(v / 0.005) * 0.005
+    local rawPct = math.clamp(rounded, 0.01, 1.00)
+    sliderValue = rawPct
+    flashFill.Size = UDim2.new(sliderValue, 0, 1, 0)
+    flashKnob.Position = UDim2.new(sliderValue, -5, 0.5, -5)
+    percentLabel.Text = string.format("%.1f%%", sliderValue * 100)
+    if not skipBoxUpdate then
+        flashBox.Text = string.format("%.1f", sliderValue * 100)
+    end
+    saveSettings()
+end
+
+flashBox.FocusLost:Connect(function()
+    local val = tonumber(flashBox.Text)
+    if val then
+        val = roundToHalf(val)
+        val = math.clamp(val, 1, 100)
+        updateFlash(val / 100, true)
+    end
+    flashBox.Text = string.format("%.1f", sliderValue * 100)
+end)
+
+local draggingFlash = false
+flashTrack.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingFlash = true
+        local rawPos = (input.Position.X - flashTrack.AbsolutePosition.X) / flashTrack.AbsoluteSize.X
+        updateFlash(rawPos)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if draggingFlash and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local rawPos = (input.Position.X - flashTrack.AbsolutePosition.X) / flashTrack.AbsoluteSize.X
+        updateFlash(rawPos)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingFlash = false
+    end
+end)
+
+updateFlash(sliderValue)
+
+local laggerSection = Instance.new("Frame")
+laggerSection.Size = UDim2.new(0.88, 0, 0, 34)
+laggerSection.Position = UDim2.new(0.06, 0, 0, 170)
+laggerSection.BackgroundTransparency = 1
+laggerSection.Parent = MainFrame
+
+local laggerLabel = Instance.new("TextLabel", laggerSection)
+laggerLabel.Size = UDim2.new(1,0,0,12)
+laggerLabel.Text = "LAGGER POWER"
+laggerLabel.TextColor3 = WHITE
+laggerLabel.Font = Enum.Font.GothamBold
+laggerLabel.TextSize = 10
+laggerLabel.TextXAlignment = Enum.TextXAlignment.Center
+laggerLabel.BackgroundTransparency = 1
+
+local laggerValueLabel = Instance.new("TextLabel", laggerSection)
+laggerValueLabel.Size = UDim2.new(1, 0, 0, 14)
+laggerValueLabel.Position = UDim2.new(0, 0, 0, 12)
+laggerValueLabel.Text = tostring(laggerPower)
+laggerValueLabel.TextColor3 = WHITE
+laggerValueLabel.Font = Enum.Font.GothamBold
+laggerValueLabel.TextSize = 11
+laggerValueLabel.TextXAlignment = Enum.TextXAlignment.Center
+laggerValueLabel.BackgroundTransparency = 1
+
+local laggerBox = Instance.new("TextBox")
+laggerBox.Size = UDim2.new(0, 22, 0, 16)
+laggerBox.Position = UDim2.new(1, -26, 0, 12)
+laggerBox.BackgroundColor3 = MID_GRAY
+laggerBox.Text = tostring(laggerPower)
+laggerBox.TextColor3 = WHITE
+laggerBox.Font = Enum.Font.GothamBold
+laggerBox.TextSize = 10
+laggerBox.Parent = laggerSection
+Instance.new("UICorner", laggerBox).CornerRadius = UDim.new(0, 4)
+local ls = Instance.new("UIStroke", laggerBox)
+ls.Color = getThemeColor()
+ls.Thickness = 1
+ls.Transparency = 0.45
+
+local laggerTrack = Instance.new("Frame", laggerSection)
+laggerTrack.Size = UDim2.new(1,0,0,4)
+laggerTrack.Position = UDim2.new(0,0,0,29)
+laggerTrack.BackgroundColor3 = MID_GRAY
+Instance.new("UICorner", laggerTrack).CornerRadius = UDim.new(1,0)
+
+local laggerFill = Instance.new("Frame", laggerTrack)
+laggerFill.Size = UDim2.new(laggerPower/100,0,1,0)
+laggerFill.BackgroundColor3 = getThemeColor()
+Instance.new("UICorner", laggerFill).CornerRadius = UDim.new(1,0)
+
+local laggerKnob = Instance.new("Frame", laggerTrack)
+laggerKnob.Size = UDim2.new(0,10,0,10)
+laggerKnob.Position = UDim2.new(laggerPower/100,-5,0.5,-5)
+laggerKnob.BackgroundColor3 = WHITE
+Instance.new("UICorner", laggerKnob).CornerRadius = UDim.new(1,0)
+Instance.new("UIStroke", laggerKnob).Color = getThemeColor()
+
+local function updateLagger(v, skipBoxUpdate)
+    laggerPower = math.clamp(v, 0, 100)
+    laggerFill.Size = UDim2.new(laggerPower/100, 0, 1, 0)
+    laggerKnob.Position = UDim2.new(laggerPower/100, -5, 0.5, -5)
+    laggerValueLabel.Text = tostring(math.floor(laggerPower))
+    if not skipBoxUpdate then
+        laggerBox.Text = tostring(math.floor(laggerPower))
+    end
+    saveSettings()
+end
+
+laggerBox.FocusLost:Connect(function()
+    local val = tonumber(laggerBox.Text)
+    if val then
+        val = roundToHalf(val)
+        updateLagger(val, true)
+    end
+    laggerBox.Text = tostring(math.floor(laggerPower))
+end)
+
+local draggingLagger = false
+laggerTrack.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingLagger = true
+        local rawPos = (input.Position.X - laggerTrack.AbsolutePosition.X) / laggerTrack.AbsoluteSize.X
+        updateLagger(rawPos * 100)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if draggingLagger and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local rawPos = (input.Position.X - laggerTrack.AbsolutePosition.X) / laggerTrack.AbsoluteSize.X
+        updateLagger(rawPos * 100)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingLagger = false
+    end
+end)
+
+updateLagger(laggerPower)
+
+local BottomDiscord = Instance.new("TextLabel")
+BottomDiscord.Size = UDim2.new(1, 0, 0, 12)
+BottomDiscord.Position = UDim2.new(0, 0, 1, -15)
+BottomDiscord.BackgroundTransparency = 1
+BottomDiscord.Text = ""
+BottomDiscord.TextColor3 = WHITE
+BottomDiscord.Font = Enum.Font.Gotham
+BottomDiscord.TextSize = 9
+BottomDiscord.TextXAlignment = Enum.TextXAlignment.Center
+BottomDiscord.Parent = MainFrame
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if bindingAlignKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            alignKey = input.KeyCode
+            bindingAlignKey = false
+            AlignKeybindBtn.Text = "[" .. alignKey.Name .. "]"
+            saveSettings()
+        end
+        return
+    end
+    if bindingResetKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            resetKeybind = input.KeyCode
+            bindingResetKey = false
+            if resetToggleUI and resetToggleUI.BindBtn then resetToggleUI.BindBtn.Text = "[" .. resetKeybind.Name .. "]" end
+            saveSettings()
+        end
+        return
+    end
+    if bindingRejoinKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            rejoinKeybind = input.KeyCode
+            bindingRejoinKey = false
+            if rejoinToggleUI and rejoinToggleUI.BindBtn then rejoinToggleUI.BindBtn.Text = "[" .. rejoinKeybind.Name .. "]" end
+            saveSettings()
+        end
+        return
+    end
+    if bindingKickKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            kickKeybind = input.KeyCode
+            bindingKickKey = false
+            if kickToggleUI and kickToggleUI.BindBtn then kickToggleUI.BindBtn.Text = "[" .. kickKeybind.Name .. "]" end
+            saveSettings()
+        end
+        return
+    end
+    if bindingTpDownKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            tpDownKeybind = input.KeyCode
+            bindingTpDownKey = false
+            if tpDownToggleUI and tpDownToggleUI.BindBtn then tpDownToggleUI.BindBtn.Text = "[" .. tpDownKeybind.Name .. "]" end
+            saveSettings()
+        end
+        return
+    end
+    if bindingDropKey then
+        if input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode ~= Enum.KeyCode.MouseButton1 then
+            dropKeybind = input.KeyCode
+            bindingDropKey = false
+            if dropToggleUI and dropToggleUI.BindBtn then dropToggleUI.BindBtn.Text = "[" .. dropKeybind.Name .. "]" end
+            saveSettings()
+        end
+        return
+    end
+    if input.KeyCode == alignKey then
+        ExecuteAlign()
+    elseif input.KeyCode == resetKeybind then
+        instantReset()
+    elseif input.KeyCode == rejoinKeybind then
+        rejoin()
+    elseif input.KeyCode == kickKeybind then
+        game:Shutdown()
+    elseif input.KeyCode == tpDownKeybind then
+        runTPDown()
+    elseif input.KeyCode == dropKeybind then
+        startWalkFling()
+        task.delay(0.6, stopWalkFling)
+    end
+end)
+
+if toggleStates["Anti Ragdoll"] then startAntiRagdoll() end
+if toggleStates["Kick on Steal"] then startAutoKickAfterSteal() end
+if toggleStates["Slow Fall"] then ToggleSlowFall(true) end
+if toggleStates["Anti Bee & Disco"] then ToggleAntiBee(true) end
+if toggleStates["AP Spammer"] then ToggleAPSpammer(true) end
+if toggleStates["Inf Jump"] then startInfJump() end
+if toggleStates["Drop Button"] then dropMobBtn.Visible = true end
+if toggleStates["TP Down Button"] then tpDownMobBtn.Visible = true end
+if toggleStates["Reset"] then rstMobBtn.Visible = true end
+if toggleStates["Rejoin"] then rjnMobBtn.Visible = true end
+if toggleStates["Kick"] then kckMobBtn.Visible = true end
+if toggleStates["Speed Boost"] then enableSpeedBoost() end
+if toggleStates["Camera Move"] then enableFovChanger() end
+
+task.spawn(function()
+    while task.wait(1) do
+        local ping = StatsService.Network.ServerStatsItem["Data Ping"]:GetValue() or 0
+        PingLabel.Text = "PING: " .. math.floor(ping)
+    end
+end)
+
+updateAllTheme()
+
+print("XDS Flash TP - Updated (Helper Section Restored, Theme Fixed, Kick on Steal Added)")
