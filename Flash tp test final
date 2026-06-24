@@ -14,23 +14,37 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ==================== CONFIGURATION ====================
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
+local FILE_NAME = "xds_key_auth.txt"
 
 -- ==================== MAIN SCRIPT EXECUTION ====================
 local function runMainScript()
     -- !!! PASTE YOUR ENTIRE MAIN SCRIPT UNDER THIS LINE !!!
     print("Main script executed successfully!")
-    
+
 end
 
--- ==================== CHECK PREVIOUS REDEMPTION ====================
--- Check if a 24-hour timestamp exists and if it hasn't expired yet
-if _G.XDS_KeyExpiryTime and os.time() < _G.XDS_KeyExpiryTime then
-    -- Key is still valid for the 24hr window, skip GUI entirely and run the script
-    task.spawn(runMainScript)
-    return
+-- ==================== HELPER SAVING FUNCTIONS ====================
+local function saveExpiryTime(timestamp)
+    if writefile then
+        writefile(FILE_NAME, tostring(timestamp))
+    end
 end
 
--- Prevent multiple GUI instances overlapping
+local function getExpiryTime()
+    if readfile and isfile and isfile(FILE_NAME) then
+        local content = readfile(FILE_NAME)
+        return tonumber(content)
+    end
+    return nil
+end
+
+local function deleteExpiryFile()
+    if delfile and isfile and isfile(FILE_NAME) then
+        delfile(FILE_NAME)
+    end
+end
+
+-- Prevent multiple GUI instances overlapping on re-execution
 local oldGui = PlayerGui:FindFirstChild("XDS_FakeKeySystem")
 if oldGui then oldGui:Destroy() end
 
@@ -39,6 +53,18 @@ local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "XDS_FakeKeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = PlayerGui
+
+-- Small White Countdown Label (Top Right of Screen)
+local countdownLabel = Instance.new("TextLabel")
+countdownLabel.Size = UDim2.new(0, 150, 0, 30)
+countdownLabel.Position = UDim2.new(1, -160, 0, 10)
+countdownLabel.BackgroundTransparency = 1
+countdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+countdownLabel.Font = Enum.Font.GothamBold
+countdownLabel.TextSize = 14
+countdownLabel.TextXAlignment = Enum.TextXAlignment.Right
+countdownLabel.Visible = false
+countdownLabel.Parent = keyGui
 
 -- Main UI Frame
 local keyFrame = Instance.new("Frame")
@@ -108,30 +134,19 @@ infoLabel.TextSize = 14
 infoLabel.TextYAlignment = Enum.TextYAlignment.Top
 infoLabel.Parent = keyFrame
 
--- Small White Countdown Label (Top Right of Screen)
-local countdownLabel = Instance.new("TextLabel")
-countdownLabel.Size = UDim2.new(0, 150, 0, 30)
-countdownLabel.Position = UDim2.new(1, -160, 0, 10)
-countdownLabel.BackgroundTransparency = 1
-countdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-countdownLabel.Font = Enum.Font.GothamBold
-countdownLabel.TextSize = 14
-countdownLabel.TextXAlignment = Enum.TextXAlignment.Right
-countdownLabel.Visible = false
-countdownLabel.Parent = keyGui
-
 -- ==================== COUNTDOWN SYSTEM ====================
-local function start24HourCountdown()
-    local totalSeconds = 24 * 3600
-    _G.XDS_KeyExpiryTime = os.time() + totalSeconds -- Tracks execution block global
+local function start24HourCountdown(expiryTimestamp)
+    countdownLabel.Visible = true
     
     task.spawn(function()
-        while totalSeconds > 0 and countdownLabel.Parent do
+        while os.time() < expiryTimestamp and countdownLabel.Parent do
+            local totalSeconds = expiryTimestamp - os.time()
+            
             local h = math.floor(totalSeconds / 3600)
             local m = math.floor((totalSeconds % 3600) / 60)
             local s = totalSeconds % 60
             
-            -- Custom display rule requested
+            -- Dynamic text formatting rule
             if h > 0 then
                 countdownLabel.Text = h .. "hrs"
             elseif m > 0 then
@@ -141,21 +156,23 @@ local function start24HourCountdown()
             end
             
             task.wait(1)
-            totalSeconds = totalSeconds - 1
         end
         
         if countdownLabel.Parent then
             countdownLabel.Text = "EXPIRED"
-            _G.XDS_KeyExpiryTime = nil
+            deleteExpiryFile()
         end
     end)
 end
 
 local function redeemSuccess()
-    keyFrame:Destroy()               -- Deletes the input popup completely
-    countdownLabel.Visible = true     -- Shows the small white countdown text top right
-    start24HourCountdown()           -- Starts the 24-hour tracker
-    task.spawn(runMainScript)        -- Instantly fires your custom gameplay script
+    keyFrame:Destroy() -- Destroys the main large key layout completely
+    
+    local expiryTime = os.time() + (24 * 3600)
+    saveExpiryTime(expiryTime) -- Saves the precise expiration time to a file
+    
+    start24HourCountdown(expiryTime)
+    task.spawn(runMainScript) -- Instantly fires your custom gameplay script
 end
 
 -- ==================== BUTTON CONNECTIONS ====================
@@ -179,6 +196,17 @@ redeemBtn.MouseButton1Click:Connect(function()
         redeemBtn.Text = "Redeem"
     end
 end)
+
+-- ==================== INITIALIZATION CHECK ====================
+local savedExpiry = getExpiryTime()
+
+if savedExpiry and os.time() < savedExpiry then
+    -- File found and valid! Auto-close input box, load countdown, execute code.
+    keyFrame:Destroy()
+    start24HourCountdown(savedExpiry)
+    task.spawn(runMainScript)
+end
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local StatsService = game:GetService("Stats")
