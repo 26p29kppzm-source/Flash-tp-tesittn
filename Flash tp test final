@@ -12,18 +12,27 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ==================== FAKE KEY SYSTEM (Destroys on success) ====================
-
+-- ==================== CONFIGURATION ====================
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
 
--- Prevent multiple instances
-if _G.XDS_FakeKeyActive then
-    -- Re-execution = reset key GUI
-    local oldGui = PlayerGui:FindFirstChild("XDS_FakeKeySystem")
-    if oldGui then oldGui:Destroy() end
-else
-    _G.XDS_FakeKeyActive = true
+-- ==================== MAIN SCRIPT EXECUTION ====================
+local function runMainScript()
+    -- !!! PASTE YOUR ENTIRE MAIN SCRIPT UNDER THIS LINE !!!
+    print("Main script executed successfully!")
+    
 end
+
+-- ==================== CHECK PREVIOUS REDEMPTION ====================
+-- Check if a 24-hour timestamp exists and if it hasn't expired yet
+if _G.XDS_KeyExpiryTime and os.time() < _G.XDS_KeyExpiryTime then
+    -- Key is still valid for the 24hr window, skip GUI entirely and run the script
+    task.spawn(runMainScript)
+    return
+end
+
+-- Prevent multiple GUI instances overlapping
+local oldGui = PlayerGui:FindFirstChild("XDS_FakeKeySystem")
+if oldGui then oldGui:Destroy() end
 
 -- Create ScreenGui
 local keyGui = Instance.new("ScreenGui")
@@ -31,6 +40,7 @@ keyGui.Name = "XDS_FakeKeySystem"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = PlayerGui
 
+-- Main UI Frame
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0.85, 0, 0.75, 0)
 keyFrame.Position = UDim2.new(0.075, 0, 0.125, 0)
@@ -98,38 +108,57 @@ infoLabel.TextSize = 14
 infoLabel.TextYAlignment = Enum.TextYAlignment.Top
 infoLabel.Parent = keyFrame
 
--- Close button (top right)
-local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 40, 0, 40)
-closeBtn.Position = UDim2.new(1, -45, 0, 10)
-closeBtn.BackgroundTransparency = 1
-closeBtn.Text = "✕"
-closeBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
-closeBtn.TextSize = 28
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.Parent = keyFrame
+-- Small White Countdown Label (Top Right of Screen)
+local countdownLabel = Instance.new("TextLabel")
+countdownLabel.Size = UDim2.new(0, 150, 0, 30)
+countdownLabel.Position = UDim2.new(1, -160, 0, 10)
+countdownLabel.BackgroundTransparency = 1
+countdownLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+countdownLabel.Font = Enum.Font.GothamBold
+countdownLabel.TextSize = 14
+countdownLabel.TextXAlignment = Enum.TextXAlignment.Right
+countdownLabel.Visible = false
+countdownLabel.Parent = keyGui
 
-
--- ==================== MAIN SCRIPT EXECUTION ====================
-
-local function runMainScript()
-    -- !!! PASTE YOUR MAIN SCRIPT DIRECTLY UNDER THIS LINE !!!
-    print("Key verification successful! Executing main script...")
+-- ==================== COUNTDOWN SYSTEM ====================
+local function start24HourCountdown()
+    local totalSeconds = 24 * 3600
+    _G.XDS_KeyExpiryTime = os.time() + totalSeconds -- Tracks execution block global
     
+    task.spawn(function()
+        while totalSeconds > 0 and countdownLabel.Parent do
+            local h = math.floor(totalSeconds / 3600)
+            local m = math.floor((totalSeconds % 3600) / 60)
+            local s = totalSeconds % 60
+            
+            -- Custom display rule requested
+            if h > 0 then
+                countdownLabel.Text = h .. "hrs"
+            elseif m > 0 then
+                countdownLabel.Text = m .. "min"
+            else
+                countdownLabel.Text = tostring(s)
+            end
+            
+            task.wait(1)
+            totalSeconds = totalSeconds - 1
+        end
+        
+        if countdownLabel.Parent then
+            countdownLabel.Text = "EXPIRED"
+            _G.XDS_KeyExpiryTime = nil
+        end
+    end)
 end
 
-
--- ==================== SYSTEM FUNCTIONS ====================
-
-local function hideKeySystem()
-    keyGui:Destroy() -- Completely removes the entire GUI from the player's screen
-    _G.XDS_FakeKeyActive = nil
-    
-    -- Triggers your main script execution
-    task.spawn(runMainScript)
+local function redeemSuccess()
+    keyFrame:Destroy()               -- Deletes the input popup completely
+    countdownLabel.Visible = true     -- Shows the small white countdown text top right
+    start24HourCountdown()           -- Starts the 24-hour tracker
+    task.spawn(runMainScript)        -- Instantly fires your custom gameplay script
 end
 
--- Button connections
+-- ==================== BUTTON CONNECTIONS ====================
 getBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard(DISCORD_LINK)
@@ -143,19 +172,13 @@ redeemBtn.MouseButton1Click:Connect(function()
     if keyBox.Text:len() > 0 then
         redeemBtn.Text = "Success!"
         task.wait(0.8)
-        hideKeySystem()
+        redeemSuccess()
     else
         redeemBtn.Text = "Enter something!"
         task.wait(1.2)
         redeemBtn.Text = "Redeem"
     end
 end)
-
-closeBtn.MouseButton1Click:Connect(hideKeySystem)
-
--- ==================== MAIN SCRIPT STARTS HERE ====================
--- Put your XDS Flash TP code right below this line
--- It will run immediately even while the fake key GUI is showing
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local StatsService = game:GetService("Stats")
