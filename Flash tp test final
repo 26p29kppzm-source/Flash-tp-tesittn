@@ -12,7 +12,7 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ==================== FAKE ANNOYING KEY SYSTEM (Fullscreen + 24 Hour Countdown) ====================
+-- ==================== FAKE KEY SYSTEM (Destroys on success) ====================
 
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
 
@@ -109,69 +109,37 @@ closeBtn.TextSize = 28
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.Parent = keyFrame
 
--- Countdown Frame (Top Right Corner)
-local countdownFrame = Instance.new("Frame")
-countdownFrame.Size = UDim2.new(0, 240, 0, 70)
-countdownFrame.Position = UDim2.new(1, -250, 0, 10)
-countdownFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-countdownFrame.BorderSizePixel = 0
-countdownFrame.Visible = false
-countdownFrame.Parent = keyGui
-Instance.new("UICorner", countdownFrame).CornerRadius = UDim.new(0, 12)
 
-local countdownLabel = Instance.new("TextLabel")
-countdownLabel.Size = UDim2.new(1, -20, 1, -20)
-countdownLabel.Position = UDim2.new(0, 10, 0, 10)
-countdownLabel.BackgroundTransparency = 1
-countdownLabel.TextColor3 = Color3.fromRGB(0, 255, 120)
-countdownLabel.TextScaled = true
-countdownLabel.Font = Enum.Font.GothamBold
-countdownLabel.Text = "⏳ 24:00:00"
-countdownLabel.Parent = countdownFrame
+-- ==================== MAIN SCRIPT EXECUTION ====================
 
--- Fake "verification"
-local function hideKeySystem()
-    keyFrame:Destroy()
-    countdownFrame.Visible = true
-    start24HourCountdown()
+local function runMainScript()
+    -- !!! PASTE YOUR MAIN SCRIPT DIRECTLY UNDER THIS LINE !!!
+    print("Key verification successful! Executing main script...")
+    
 end
 
-local function start24HourCountdown()
-    local totalSeconds = 24 * 3600
+
+-- ==================== SYSTEM FUNCTIONS ====================
+
+local function hideKeySystem()
+    keyGui:Destroy() -- Completely removes the entire GUI from the player's screen
+    _G.XDS_FakeKeyActive = nil
     
-    spawn(function()
-        while totalSeconds > 0 and countdownFrame.Parent do
-            local h = math.floor(totalSeconds / 3600)
-            local m = math.floor((totalSeconds % 3600) / 60)
-            local s = totalSeconds % 60
-            
-            countdownLabel.Text = string.format("⏳ Time Left: %02d:%02d:%02d", h, m, s)
-            
-            if h <= 1 then
-                countdownLabel.TextColor3 = Color3.fromRGB(255, 140, 0)
-            end
-            
-            task.wait(1)
-            totalSeconds -= 1
-        end
-        
-        if countdownFrame.Parent then
-            countdownLabel.Text = "⏰ EXPIRED - Re-execute to reset"
-            countdownLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
-        end
-    end)
+    -- Triggers your main script execution
+    task.spawn(runMainScript)
 end
 
 -- Button connections
 getBtn.MouseButton1Click:Connect(function()
-    setclipboard(DISCORD_LINK)
+    if setclipboard then
+        setclipboard(DISCORD_LINK)
+    end
     getBtn.Text = "Copied to Clipboard!"
     task.wait(1.5)
     getBtn.Text = "Get Key"
 end)
 
 redeemBtn.MouseButton1Click:Connect(function()
-    -- Fake success on any input
     if keyBox.Text:len() > 0 then
         redeemBtn.Text = "Success!"
         task.wait(0.8)
