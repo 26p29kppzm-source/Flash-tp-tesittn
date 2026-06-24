@@ -12,7 +12,7 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ==================== KEY SYSTEM (FULL SCREEN) ====================
+-- ==================== KEY SYSTEM (BIGGER FULLSCREEN) ====================
 local CORRECT_KEY = "XDS_FLASH_ON_TOP"
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
 local KEY_SAVE_FILE = "XDS_KeySaved.json"
@@ -23,7 +23,7 @@ local function isKeyValid()
         return HttpService:JSONDecode(readfile(KEY_SAVE_FILE))
     end)
     if not success or not data.timestamp then return false end
-    return (os.time() - data.timestamp) < 86400 -- 24 hours
+    return (os.time() - data.timestamp) < 86400
 end
 
 local function saveKeySuccess()
@@ -35,8 +35,8 @@ local function saveKeySuccess()
 end
 
 local function loadMainScript()
-    -- ==================== YOUR FULL XDS FLASH TP SCRIPT GOES HERE ====================
-    -- Paste everything from your previous main script here (steal detector, GUI, toggles, etc.)
+    -- ==================== PASTE YOUR FULL XDS FLASH TP SCRIPT HERE ====================
+    -- (All your previous code: steal detector, GUI, toggles, theme, anti-lag, etc.)
 
     local sliderValue = 0.915
     local laggerPower = 50
@@ -69,12 +69,12 @@ local function loadMainScript()
     local TARGET_TRANSPARENCY = 0.65
     local currentTheme = "White"
 
-    -- [INSERT YOUR FULL PREVIOUS CODE HERE - everything except the old key system]
+    -- [INSERT YOUR FULL PREVIOUS MAIN CODE HERE]
 
     print("✅ XDS Flash TP Loaded Successfully")
 end
 
--- ==================== SHOW KEY SYSTEM ====================
+-- ==================== BIG FULLSCREEN KEY GUI ====================
 if isKeyValid() then
     loadMainScript()
 else
@@ -84,76 +84,76 @@ else
     keyGui.Parent = PlayerGui
 
     local keyFrame = Instance.new("Frame")
-    keyFrame.Size = UDim2.new(1, 0, 1, 0)        -- FULL SCREEN
+    keyFrame.Size = UDim2.new(1, 0, 1, 0)
     keyFrame.Position = UDim2.new(0, 0, 0, 0)
-    keyFrame.BackgroundColor3 = Color3.fromRGB(8, 8, 8)
+    keyFrame.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
     keyFrame.BorderSizePixel = 0
     keyFrame.Parent = keyGui
 
     local stroke = Instance.new("UIStroke")
-    stroke.Thickness = 2.5
+    stroke.Thickness = 3
     stroke.Color = Color3.fromRGB(255, 255, 255)
-    stroke.Transparency = 0.15
+    stroke.Transparency = 0.1
     stroke.Parent = keyFrame
 
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(0.9, 0, 0, 80)
-    title.Position = UDim2.new(0.05, 0, 0.15, 0)
+    title.Size = UDim2.new(0.95, 0, 0, 100)
+    title.Position = UDim2.new(0.025, 0, 0.12, 0)
     title.BackgroundTransparency = 1
     title.Text = "XDS FLASH TP"
     title.TextColor3 = Color3.fromRGB(255, 255, 255)
     title.Font = Enum.Font.GothamBold
-    title.TextSize = 32
+    title.TextSize = 42
     title.Parent = keyFrame
 
     local keyBox = Instance.new("TextBox")
-    keyBox.Size = UDim2.new(0.7, 0, 0, 55)
-    keyBox.Position = UDim2.new(0.15, 0, 0.38, 0)
+    keyBox.Size = UDim2.new(0.75, 0, 0, 65)
+    keyBox.Position = UDim2.new(0.125, 0, 0.35, 0)
     keyBox.PlaceholderText = "Enter Key Here"
     keyBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     keyBox.Font = Enum.Font.Gotham
-    keyBox.TextSize = 18
+    keyBox.TextSize = 20
     keyBox.Parent = keyFrame
-    Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 12)
+    Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 14)
 
     local getBtn = Instance.new("TextButton")
-    getBtn.Size = UDim2.new(0.35, 0, 0, 50)
+    getBtn.Size = UDim2.new(0.35, 0, 0, 55)
     getBtn.Position = UDim2.new(0.1, 0, 0.55, 0)
     getBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     getBtn.Text = "Get Key"
     getBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     getBtn.Font = Enum.Font.GothamBold
-    getBtn.TextSize = 16
+    getBtn.TextSize = 18
     getBtn.Parent = keyFrame
-    Instance.new("UICorner", getBtn).CornerRadius = UDim.new(0, 10)
+    Instance.new("UICorner", getBtn).CornerRadius = UDim.new(0, 12)
 
     local redeemBtn = Instance.new("TextButton")
-    redeemBtn.Size = UDim2.new(0.35, 0, 0, 50)
+    redeemBtn.Size = UDim2.new(0.35, 0, 0, 55)
     redeemBtn.Position = UDim2.new(0.55, 0, 0.55, 0)
     redeemBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     redeemBtn.Text = "Redeem"
     redeemBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     redeemBtn.Font = Enum.Font.GothamBold
-    redeemBtn.TextSize = 16
+    redeemBtn.TextSize = 18
     redeemBtn.Parent = keyFrame
-    Instance.new("UICorner", redeemBtn).CornerRadius = UDim.new(0, 10)
+    Instance.new("UICorner", redeemBtn).CornerRadius = UDim.new(0, 12)
 
     local infoLabel = Instance.new("TextLabel")
-    infoLabel.Size = UDim2.new(0.9, 0, 0, 70)
+    infoLabel.Size = UDim2.new(0.9, 0, 0, 80)
     infoLabel.Position = UDim2.new(0.05, 0, 0.72, 0)
     infoLabel.BackgroundTransparency = 1
     infoLabel.Text = "Key system won’t show in the next 24hrs\nJoin /pjuj99ure5"
-    infoLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+    infoLabel.TextColor3 = Color3.fromRGB(170, 170, 170)
     infoLabel.Font = Enum.Font.Gotham
-    infoLabel.TextSize = 15
+    infoLabel.TextSize = 16
     infoLabel.TextYAlignment = Enum.TextYAlignment.Top
     infoLabel.Parent = keyFrame
 
     getBtn.MouseButton1Click:Connect(function()
         setclipboard(DISCORD_LINK)
-        getBtn.Text = "Copied!"
-        task.wait(1.6)
+        getBtn.Text = "Copied to Clipboard!"
+        task.wait(1.8)
         getBtn.Text = "Get Key"
     end)
 
