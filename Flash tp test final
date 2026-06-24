@@ -1,6 +1,8 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local StatsService = game:GetService("Stats")
 local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
@@ -10,94 +12,116 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ==================== KEY SYSTEM ====================
+-- ==================== KEY SYSTEM (24 Hour Bypass) ====================
 local CORRECT_KEY = "XDS_FLASH_ON_TOP"
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
+local KEY_SAVE_FILE = "XDS_KeySaved.json"
 
-local keyGui = Instance.new("ScreenGui")
-keyGui.Name = "XDS_KeySystem"
-keyGui.ResetOnSpawn = false
-keyGui.Parent = PlayerGui
+local function isKeyValid()
+    if not isfile or not isfile(KEY_SAVE_FILE) then return false end
+    local success, data = pcall(function()
+        return HttpService:JSONDecode(readfile(KEY_SAVE_FILE))
+    end)
+    if not success or not data.timestamp then return false end
+    return (os.time() - data.timestamp) < 86400 -- 24 hours
+end
 
-local keyFrame = Instance.new("Frame")
-keyFrame.Size = UDim2.new(0, 280, 0, 160)
-keyFrame.Position = UDim2.new(0.5, -140, 0.5, -80)
-keyFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-keyFrame.BorderSizePixel = 0
-keyFrame.Parent = keyGui
-Instance.new("UICorner", keyFrame).CornerRadius = UDim.new(0, 12)
-
-local keyStroke = Instance.new("UIStroke")
-keyStroke.Thickness = 1.8
-keyStroke.Color = Color3.fromRGB(255, 255, 255)
-keyStroke.Transparency = 0.3
-keyStroke.Parent = keyFrame
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "XDS FLASH TP"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 18
-title.Parent = keyFrame
-
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(0.85, 0, 0, 35)
-keyBox.Position = UDim2.new(0.075, 0, 0, 55)
-keyBox.PlaceholderText = "Enter Key Here"
-keyBox.Text = ""
-keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyBox.Font = Enum.Font.Gotham
-keyBox.TextSize = 14
-keyBox.Parent = keyFrame
-Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
-
-local getKeyBtn = Instance.new("TextButton")
-getKeyBtn.Size = UDim2.new(0.4, 0, 0, 32)
-getKeyBtn.Position = UDim2.new(0.08, 0, 0, 105)
-getKeyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-getKeyBtn.Text = "Get Key"
-getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-getKeyBtn.Font = Enum.Font.GothamBold
-getKeyBtn.TextSize = 13
-getKeyBtn.Parent = keyFrame
-Instance.new("UICorner", getKeyBtn).CornerRadius = UDim.new(0, 8)
-
-local redeemBtn = Instance.new("TextButton")
-redeemBtn.Size = UDim2.new(0.4, 0, 0, 32)
-redeemBtn.Position = UDim2.new(0.52, 0, 0, 105)
-redeemBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-redeemBtn.Text = "Redeem"
-redeemBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-redeemBtn.Font = Enum.Font.GothamBold
-redeemBtn.TextSize = 13
-redeemBtn.Parent = keyFrame
-Instance.new("UICorner", redeemBtn).CornerRadius = UDim.new(0, 8)
-
--- Get Key Button
-getKeyBtn.MouseButton1Click:Connect(function()
-    setclipboard(DISCORD_LINK)
-    getKeyBtn.Text = "Copied!"
-    task.wait(1.5)
-    getKeyBtn.Text = "Get Key"
-end)
-
--- Redeem Button
-redeemBtn.MouseButton1Click:Connect(function()
-    if keyBox.Text == CORRECT_KEY then
-        keyGui:Destroy()
-        -- Start main script here
-        loadMainScript()
-    else
-        redeemBtn.Text = "Invalid Key!"
-        task.wait(1.5)
-        redeemBtn.Text = "Redeem"
+local function saveKeySuccess()
+    if writefile then
+        pcall(function()
+            writefile(KEY_SAVE_FILE, HttpService:JSONEncode({timestamp = os.time()}))
+        end)
     end
-end)
+end
 
--- Do not call loadMainScript() here - it only runs after correct key
+-- Show Key System only if needed
+local keyGuiVisible = not isKeyValid()
+
+if keyGuiVisible then
+    local keyGui = Instance.new("ScreenGui")
+    keyGui.Name = "XDS_KeySystem"
+    keyGui.ResetOnSpawn = false
+    keyGui.Parent = PlayerGui
+
+    local keyFrame = Instance.new("Frame")
+    keyFrame.Size = UDim2.new(0, 280, 0, 170)
+    keyFrame.Position = UDim2.new(0.5, -140, 0.5, -85)
+    keyFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    keyFrame.BorderSizePixel = 0
+    keyFrame.Parent = keyGui
+    Instance.new("UICorner", keyFrame).CornerRadius = UDim.new(0, 12)
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Thickness = 1.8
+    stroke.Color = Color3.fromRGB(255, 255, 255)
+    stroke.Transparency = 0.25
+    stroke.Parent = keyFrame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0, 40)
+    title.BackgroundTransparency = 1
+    title.Text = "XDS FLASH TP"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 18
+    title.Parent = keyFrame
+
+    local keyBox = Instance.new("TextBox")
+    keyBox.Size = UDim2.new(0.85, 0, 0, 36)
+    keyBox.Position = UDim2.new(0.075, 0, 0, 55)
+    keyBox.PlaceholderText = "Enter Key"
+    keyBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    keyBox.Font = Enum.Font.Gotham
+    keyBox.TextSize = 14
+    keyBox.Parent = keyFrame
+    Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
+
+    local getBtn = Instance.new("TextButton")
+    getBtn.Size = UDim2.new(0.4, 0, 0, 34)
+    getBtn.Position = UDim2.new(0.08, 0, 0, 110)
+    getBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    getBtn.Text = "Get Key"
+    getBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    getBtn.Font = Enum.Font.GothamBold
+    getBtn.TextSize = 13
+    getBtn.Parent = keyFrame
+    Instance.new("UICorner", getBtn).CornerRadius = UDim.new(0, 8)
+
+    local redeemBtn = Instance.new("TextButton")
+    redeemBtn.Size = UDim2.new(0.4, 0, 0, 34)
+    redeemBtn.Position = UDim2.new(0.52, 0, 0, 110)
+    redeemBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    redeemBtn.Text = "Redeem"
+    redeemBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    redeemBtn.Font = Enum.Font.GothamBold
+    redeemBtn.TextSize = 13
+    redeemBtn.Parent = keyFrame
+    Instance.new("UICorner", redeemBtn).CornerRadius = UDim.new(0, 8)
+
+    getBtn.MouseButton1Click:Connect(function()
+        setclipboard(DISCORD_LINK)
+        getBtn.Text = "Copied to Clipboard!"
+        task.wait(1.8)
+        getBtn.Text = "Get Key"
+    end)
+
+    redeemBtn.MouseButton1Click:Connect(function()
+        if keyBox.Text == CORRECT_KEY then
+            saveKeySuccess()
+            keyGui:Destroy()
+            loadMainScript()  -- Start main GUI
+        else
+            redeemBtn.Text = "Invalid Key!"
+            task.wait(1.5)
+            redeemBtn.Text = "Redeem"
+        end
+    end)
+else
+    -- Key already valid, load directly
+    loadMainScript()
+end 
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local StatsService = game:GetService("Stats")
