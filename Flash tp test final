@@ -1,8 +1,18 @@
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local StatsService = game:GetService("Stats")
+local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
-local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ==================== KEY SYSTEM (Fullscreen + 24 Hour) ====================
+-- ==================== KEY SYSTEM (24 Hour) ====================
 local CORRECT_KEY = "XDS_FLASH_ON_TOP"
 local DISCORD_LINK = "https://discord.gg/pjuj99ure5"
 local KEY_SAVE_FILE = "XDS_KeySaved.json"
@@ -24,21 +34,21 @@ local function saveKeySuccess()
     end
 end
 
--- ==================== MAIN SCRIPT FUNCTION ====================
+-- ==================== MAIN SCRIPT (Your full script goes here) ====================
 local function loadMainScript()
-    -- ==================== PUT YOUR ENTIRE MAIN SCRIPT HERE ====================
-    -- (Everything that was below the key system before)
-
-    print("✅ XDS FLASH TP Loaded Successfully!")
-
-    -- Example (replace with your real script):
-    -- local RunService = game:GetService("RunService")
-    -- ... your full script code ...
+    -- ██████████████████ PUT ALL YOUR ORIGINAL SCRIPT CODE BELOW THIS LINE ██████████████████
+    
+    print("✅ XDS FLASH TP Main Script Loaded!")
+    
+    -- Example of your original services (already defined above, you can remove duplicates if any)
+    -- Your teleport logic, loops, etc. go here...
+    
+    -- ██████████████████ END OF MAIN SCRIPT ██████████████████
 end
 
--- ==================== KEY CHECK ====================
+-- ==================== EXECUTION ====================
 if isKeyValid() then
-    loadMainScript()  -- Directly load main script (no GUI)
+    loadMainScript()  -- Skip GUI, run main script directly
 else
     -- Show Key GUI
     local keyGui = Instance.new("ScreenGui")
@@ -124,7 +134,7 @@ else
         if keyBox.Text == CORRECT_KEY then
             saveKeySuccess()
             keyGui:Destroy()
-            loadMainScript()  -- Load main script after successful redeem
+            loadMainScript()   -- Run main script after redeem
         else
             redeemBtn.Text = "Invalid Key!"
             task.wait(1.5)
